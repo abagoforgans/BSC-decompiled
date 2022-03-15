@@ -1,0 +1,51 @@
+name: update-contract
+
+on:
+  schedule:
+    - cron:  '*/6 * * * *'
+
+  workflow_dispatch:
+
+
+concurrency:
+  group: one
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+      - name: Prepare
+        run: sleep 10s
+        shell: bash
+
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+          
+
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+        working-directory: utils
+
+
+      - name: Dump Contracts
+        run: python3 run.py
+        working-directory: utils
+    
+
+      - name: Autocommit
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: '.'
+          author_name: bot
+          message: 'autocommit'
