@@ -38,6 +38,18 @@ jobs:
         working-directory: utils
 
 
+      - name: Update CURRENT_BLOCK
+        run: python3 run.py update
+        working-directory: utils
+    
+
+      - name: Commit CURRENT_BLOCK
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: '.'
+          message: 'update blocknumber'
+          
+          
       - name: Dump Contracts
         run: python3 run.py
         working-directory: utils
