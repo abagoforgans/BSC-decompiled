@@ -204,8 +204,14 @@ def start(tx, creation_code):
             runtimecode = '6080604052' + codes[2]
     else:
         return
+    contractAddress = None
+    try:
+        contractAddress = w3.eth.get_transaction_receipt(tx)['contractAddress']
+    except:
+        contractAddress = None
     
-    contractAddress = w3.eth.get_transaction_receipt(tx)['contractAddress']
+    if contractAddress == None:
+        return
     sys.stdout = open('../contracts/' + contractAddress + '.sol', 'w')
     print('contract main {\n\n')
 
