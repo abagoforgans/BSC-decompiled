@@ -222,7 +222,7 @@ w3 = Web3(Web3.HTTPProvider('https://rpc.ankr.com/bsc'))
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
 old_blocknumber = int(open('CURRENT_BLOCK', 'r').read())
-new_blocknumber = old_blocknumber + 20000
+new_blocknumber = old_blocknumber + 10000
 bf = open('CURRENT_BLOCK', 'w')
 bf.write(str(new_blocknumber))
 bf.close()
