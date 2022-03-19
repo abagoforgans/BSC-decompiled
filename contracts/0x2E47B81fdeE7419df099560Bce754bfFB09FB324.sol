@@ -261,6 +261,7 @@ function earn() payable {
     if ext_code.size(tokenAddress) <= 0:
         revert with 0, 'Address: call to non-contract'
     mem[260 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+    mem[324 len 0] = 0
     call tokenAddress with:
        funct uint32(stor6)
          gas gas_remaining wei
@@ -330,6 +331,7 @@ function withdraw(uint256 arg1) payable {
         if ext_code.size(tokenAddress) <= 0:
             revert with 0, 'Address: call to non-contract'
         mem[484 len 64] = unknown_0xa9059cbb(?????), msg.sender, Mask(224, 32, 0 / totalSupply) >> 32
+        mem[548 len 0] = 0
         call tokenAddress with:
            funct uint32(msg.sender)
              gas gas_remaining wei
@@ -363,6 +365,7 @@ function withdraw(uint256 arg1) payable {
         if ext_code.size(tokenAddress) <= 0:
             revert with 0, 'Address: call to non-contract'
         mem[484 len 64] = unknown_0xa9059cbb(?????), msg.sender, Mask(224, 32, (ext_call.return_data[0] * arg1) + (ext_call.return_data[0] * arg1) / totalSupply) >> 32
+        mem[548 len 0] = 0
         call tokenAddress with:
            funct uint32(msg.sender)
              gas gas_remaining wei
@@ -423,6 +426,7 @@ function withdrawAll() payable {
         if ext_code.size(tokenAddress) <= 0:
             revert with 0, 'Address: call to non-contract'
         mem[484 len 64] = unknown_0xa9059cbb(?????), msg.sender, Mask(224, 32, 0 / totalSupply) >> 32
+        mem[548 len 0] = 0
         call tokenAddress with:
            funct uint32(msg.sender)
              gas gas_remaining wei
@@ -456,6 +460,7 @@ function withdrawAll() payable {
         if ext_code.size(tokenAddress) <= 0:
             revert with 0, 'Address: call to non-contract'
         mem[484 len 64] = unknown_0xa9059cbb(?????), msg.sender, Mask(224, 32, (ext_call.return_data[0] * balanceOf[address(msg.sender)]) + (ext_call.return_data[0] * balanceOf[address(msg.sender)]) / totalSupply) >> 32
+        mem[548 len 0] = 0
         call tokenAddress with:
            funct uint32(msg.sender)
              gas gas_remaining wei
@@ -506,6 +511,7 @@ function deposit(uint256 arg1) payable {
         revert with 0, 'Address: call to non-contract'
     mem[292 len 96] = unknown_0x23b872dd(?????), msg.sender, address(this.address), Mask(224, 32, arg1) >> 32
     mem[416 len 4] = 0
+    mem[388 len 0] = 0
     call tokenAddress with:
          gas gas_remaining wei
         args Mask(224, 32, arg1) << 480, mem[388 len 4]
@@ -546,11 +552,11 @@ function deposit(uint256 arg1) payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[520 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[520 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[584 len 4]
+                args ext_call.return_data[0], mem[456 len 28], mem[584 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), arg1
@@ -592,11 +598,11 @@ function deposit(uint256 arg1) payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[584 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[584 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[648 len 4]
+                args ext_call.return_data[0], mem[520 len 28], mem[648 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), arg1
@@ -616,9 +622,6 @@ function deposit(uint256 arg1) payable {
                                     42,
                                     0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                     mem[ceil32(return_data.size) + 695 len 22]
-        require ext_code.size(address(strategyAddress))
-        call address(strategyAddress).deposit() with:
-             gas gas_remaining wei
     else:
         mem[324 len return_data.size] = ext_call.return_data[0 len return_data.size]
         if not ext_call.success:
@@ -659,11 +662,11 @@ function deposit(uint256 arg1) payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[ceil32(return_data.size) + 521 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[ceil32(return_data.size) + 521 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[ceil32(return_data.size) + 585 len 4]
+                args ext_call.return_data[0], mem[ceil32(return_data.size) + 457 len 28], mem[ceil32(return_data.size) + 585 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), arg1
@@ -673,15 +676,14 @@ function deposit(uint256 arg1) payable {
                                 42,
                                 0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                 mem[ceil32(return_data.size) + 631 len 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
             else:
                 mem[ceil32(return_data.size) + 553 len return_data.size] = ext_call.return_data[0 len return_data.size]
                 if not ext_call.success:
                     if return_data.size > 0:
                         revert with ext_call.return_data[0 len return_data.size]
-                    revert with 0, 'SafeERC20: low-level call failed'
+                    revert with 0, 
+                                'SafeERC20: low-level call failed',
+                                mem[(2 * ceil32(return_data.size)) + 622 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
                 if return_data.size > 0:
                     require return_data.size >= 32
                     if not mem[ceil32(return_data.size) + 553]:
@@ -690,10 +692,6 @@ function deposit(uint256 arg1) payable {
                                     42,
                                     0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                     mem[(2 * ceil32(return_data.size)) + 632 len (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
-                    args (Mask(8 * (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size)), -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256, 0xd0e30db000000000000000000000000000000000000000000000000000000000) >> -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256)
         else:
             if 2 * ext_call.return_data[0] <= 0:
                 revert with 0, 'SafeMath: division by zero'
@@ -716,11 +714,11 @@ function deposit(uint256 arg1) payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[ceil32(return_data.size) + 585 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[ceil32(return_data.size) + 585 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[ceil32(return_data.size) + 649 len 4]
+                args ext_call.return_data[0], mem[ceil32(return_data.size) + 521 len 28], mem[ceil32(return_data.size) + 649 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), arg1
@@ -730,15 +728,14 @@ function deposit(uint256 arg1) payable {
                                 42,
                                 0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                 mem[ceil32(return_data.size) + 695 len 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
             else:
                 mem[ceil32(return_data.size) + 617 len return_data.size] = ext_call.return_data[0 len return_data.size]
                 if not ext_call.success:
                     if return_data.size > 0:
                         revert with ext_call.return_data[0 len return_data.size]
-                    revert with 0, 'SafeERC20: low-level call failed'
+                    revert with 0, 
+                                'SafeERC20: low-level call failed',
+                                mem[(2 * ceil32(return_data.size)) + 686 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
                 if return_data.size > 0:
                     require return_data.size >= 32
                     if not mem[ceil32(return_data.size) + 617]:
@@ -747,10 +744,9 @@ function deposit(uint256 arg1) payable {
                                     42,
                                     0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                     mem[(2 * ceil32(return_data.size)) + 696 len (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
-                    args (Mask(8 * (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size)), -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256, 0xd0e30db000000000000000000000000000000000000000000000000000000000) >> -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256)
+    require ext_code.size(address(strategyAddress))
+    call address(strategyAddress).deposit() with:
+         gas gas_remaining wei
     if not ext_call.success:
         revert with ext_call.return_data[0 len return_data.size]
 }
@@ -789,6 +785,7 @@ function depositAll() payable {
         revert with 0, 'Address: call to non-contract'
     mem[292 len 96] = unknown_0x23b872dd(?????), msg.sender, address(this.address), ext_call.return_data[0 len 28]
     mem[416 len 4] = 0
+    mem[388 len 0] = 0
     call tokenAddress with:
          gas gas_remaining wei
         args Mask(736, -512, ext_call.return_data[0 len 28]) << 512, mem[388 len 4]
@@ -829,11 +826,11 @@ function depositAll() payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[520 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[520 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[584 len 4]
+                args ext_call.return_data[0], mem[456 len 28], mem[584 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), ext_call.return_data[0]
@@ -875,11 +872,11 @@ function depositAll() payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[584 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[584 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[648 len 4]
+                args ext_call.return_data[0], mem[520 len 28], mem[648 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), ext_call.return_data[0]
@@ -899,9 +896,6 @@ function depositAll() payable {
                                     42,
                                     0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                     mem[ceil32(return_data.size) + 695 len 22]
-        require ext_code.size(address(strategyAddress))
-        call address(strategyAddress).deposit() with:
-             gas gas_remaining wei
     else:
         mem[324 len return_data.size] = ext_call.return_data[0 len return_data.size]
         if not ext_call.success:
@@ -942,11 +936,11 @@ function depositAll() payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[ceil32(return_data.size) + 521 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[ceil32(return_data.size) + 521 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[ceil32(return_data.size) + 585 len 4]
+                args ext_call.return_data[0], mem[ceil32(return_data.size) + 457 len 28], mem[ceil32(return_data.size) + 585 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), ext_call.return_data[0]
@@ -956,15 +950,14 @@ function depositAll() payable {
                                 42,
                                 0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                 mem[ceil32(return_data.size) + 631 len 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
             else:
                 mem[ceil32(return_data.size) + 553 len return_data.size] = ext_call.return_data[0 len return_data.size]
                 if not ext_call.success:
                     if return_data.size > 0:
                         revert with ext_call.return_data[0 len return_data.size]
-                    revert with 0, 'SafeERC20: low-level call failed'
+                    revert with 0, 
+                                'SafeERC20: low-level call failed',
+                                mem[(2 * ceil32(return_data.size)) + 622 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
                 if return_data.size > 0:
                     require return_data.size >= 32
                     if not mem[ceil32(return_data.size) + 553]:
@@ -973,10 +966,6 @@ function depositAll() payable {
                                     42,
                                     0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                     mem[(2 * ceil32(return_data.size)) + 632 len (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
-                    args (Mask(8 * (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size)), -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256, 0xd0e30db000000000000000000000000000000000000000000000000000000000) >> -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256)
         else:
             if 2 * ext_call.return_data[0] <= 0:
                 revert with 0, 'SafeMath: division by zero'
@@ -999,11 +988,11 @@ function depositAll() payable {
             require return_data.size >= 32
             if ext_code.size(tokenAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[ceil32(return_data.size) + 585 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor6), uint32(stor6), ext_call.return_data[0 len 28]
+            mem[ceil32(return_data.size) + 585 len 64] = 0, address(strategyAddress), ext_call.return_data[0 len 28]
             call tokenAddress with:
                funct uint32(stor6)
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[ceil32(return_data.size) + 649 len 4]
+                args ext_call.return_data[0], mem[ceil32(return_data.size) + 521 len 28], mem[ceil32(return_data.size) + 649 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with unknown_0x23b872dd(?????), msg.sender, address(this.address), ext_call.return_data[0]
@@ -1013,15 +1002,14 @@ function depositAll() payable {
                                 42,
                                 0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                 mem[ceil32(return_data.size) + 695 len 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
             else:
                 mem[ceil32(return_data.size) + 617 len return_data.size] = ext_call.return_data[0 len return_data.size]
                 if not ext_call.success:
                     if return_data.size > 0:
                         revert with ext_call.return_data[0 len return_data.size]
-                    revert with 0, 'SafeERC20: low-level call failed'
+                    revert with 0, 
+                                'SafeERC20: low-level call failed',
+                                mem[(2 * ceil32(return_data.size)) + 686 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
                 if return_data.size > 0:
                     require return_data.size >= 32
                     if not mem[ceil32(return_data.size) + 617]:
@@ -1030,10 +1018,9 @@ function depositAll() payable {
                                     42,
                                     0x735361666545524332303a204552433230206f7065726174696f6e20646964206e6f7420737563636565,
                                     mem[(2 * ceil32(return_data.size)) + 696 len (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 22]
-                require ext_code.size(address(strategyAddress))
-                call address(strategyAddress).deposit() with:
-                     gas gas_remaining wei
-                    args (Mask(8 * (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size)), -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256, 0xd0e30db000000000000000000000000000000000000000000000000000000000) >> -(8 * (2 * ceil32(return_data.size)) + (-2 * ceil32(return_data.size)) + 4) + 256)
+    require ext_code.size(address(strategyAddress))
+    call address(strategyAddress).deposit() with:
+         gas gas_remaining wei
     if not ext_call.success:
         revert with ext_call.return_data[0 len return_data.size]
 }

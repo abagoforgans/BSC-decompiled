@@ -175,9 +175,10 @@ function deposit() payable {
         if ext_code.size(wantAddress) <= 0:
             revert with 0, 'Address: call to non-contract'
         mem[260 len 64] = 0, ext_call.return_data[12 len 20], 0
+        mem[324 len 0] = 0
         call wantAddress.mem[160 len 4] with:
              gas gas_remaining wei
-            args 0, 0, mem[324 len 4]
+            args Mask(480, -256, 0, ext_call.return_data[12 len 20], 0) << 256, mem[324 len 4]
         if not return_data.size:
             if not ext_call.success:
                 revert with 0, ext_call.return_data[12 len 20], 0
@@ -199,10 +200,10 @@ function deposit() payable {
                                 mem[382 len 10]
             if ext_code.size(wantAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[424 len 64] = approve(address rg1, uint256 rg2), address(ext_call.return_data[0]) << 64, 0, ext_call.return_data[0 len 28]
+            mem[424 len 64] = 0, address(ext_call.return_data[0]), ext_call.return_data[0 len 28]
             call wantAddress with:
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[488 len 4]
+                args ext_call.return_data[0], mem[360 len 28], mem[488 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with 0, ext_call.return_data[12 len 20], 0
@@ -256,11 +257,11 @@ function deposit() payable {
                                 mem[ceil32(return_data.size) + 383 len 10]
             if ext_code.size(wantAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
-            mem[ceil32(return_data.size) + 425 len 64] = approve(address rg1, uint256 rg2), address(ext_call.return_data[0]) << 64, 0, ext_call.return_data[0 len 28]
+            mem[ceil32(return_data.size) + 425 len 64] = 0, address(ext_call.return_data[0]), ext_call.return_data[0 len 28]
             mem[ceil32(return_data.size) + 517 len 4] = 0
             call wantAddress with:
                  gas gas_remaining wei
-                args Mask(480, -256, ext_call.return_data[0 len 28]) << 256, mem[ceil32(return_data.size) + 489 len 4]
+                args ext_call.return_data[0], mem[ceil32(return_data.size) + 361 len 28], mem[ceil32(return_data.size) + 489 len 4]
             if not return_data.size:
                 if not ext_call.success:
                     revert with 0, ext_call.return_data[12 len 20], 0
@@ -279,7 +280,9 @@ function deposit() payable {
                 if not ext_call.success:
                     if return_data.size > 0:
                         revert with ext_call.return_data[0 len return_data.size]
-                    revert with 0, 'SafeERC20: low-level call failed'
+                    revert with 0, 
+                                'SafeERC20: low-level call failed',
+                                mem[(2 * ceil32(return_data.size)) + 526 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
                 if return_data.size > 0:
                     require return_data.size >= 32
                     if not mem[ceil32(return_data.size) + 457]:
@@ -314,6 +317,7 @@ function withdraw(uint256 arg1) payable {
             if ext_code.size(wantAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
             mem[324 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor4), uint32(stor4), Mask(224, 32, arg1) >> 32
+            mem[388 len 0] = 0
             call wantAddress with:
                funct uint32(stor4)
                  gas gas_remaining wei
@@ -339,10 +343,11 @@ function withdraw(uint256 arg1) payable {
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
                 mem[324 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor3), uint32(stor3), 0
+                mem[388 len 0] = 0
                 call wantAddress with:
                    funct uint32(stor3)
                      gas gas_remaining wei
-                    args 0, mem[388 len 4]
+                    args Mask(480, -256, unknown_0xa9059cbb(?????), Mask(224, 0, stor3), uint32(stor3), 0) << 256, mem[388 len 4]
                 if not return_data.size:
                     require not ext_call.success
                     revert with 'SafeMath: division by zero'
@@ -363,11 +368,11 @@ function withdraw(uint256 arg1) payable {
                     revert with 0, 'SafeMath: subtraction overflow'
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
-                mem[ceil32(return_data.size) + 553 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor4), uint32(stor4), Mask(224, 32, arg1) >> 32
+                mem[ceil32(return_data.size) + 553 len 64] = 0, address(vaultAddress), Mask(224, 32, arg1) >> 32
                 call wantAddress with:
                    funct uint32(stor4)
                      gas gas_remaining wei
-                    args Mask(224, 32, arg1) << 224, mem[ceil32(return_data.size) + 617 len 4]
+                    args arg1, mem[ceil32(return_data.size) + 489 len 28], mem[ceil32(return_data.size) + 617 len 4]
             else:
                 require arg1
                 if arg1 * withdrawalFee / arg1 != withdrawalFee:
@@ -379,6 +384,7 @@ function withdraw(uint256 arg1) payable {
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
                 mem[324 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor3), uint32(stor3), Mask(224, 32, arg1 * withdrawalFee / 10000) >> 32
+                mem[388 len 0] = 0
                 call wantAddress with:
                    funct uint32(stor3)
                      gas gas_remaining wei
@@ -403,11 +409,11 @@ function withdraw(uint256 arg1) payable {
                     revert with 0, 'SafeMath: subtraction overflow'
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
-                mem[ceil32(return_data.size) + 553 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor4), uint32(stor4), Mask(224, 32, arg1 - (arg1 * withdrawalFee / 10000)) >> 32
+                mem[ceil32(return_data.size) + 553 len 64] = 0, address(vaultAddress), Mask(224, 32, arg1 - (arg1 * withdrawalFee / 10000)) >> 32
                 call wantAddress with:
                    funct uint32(stor4)
                      gas gas_remaining wei
-                    args Mask(224, 32, arg1 - (arg1 * withdrawalFee / 10000)) << 224, mem[ceil32(return_data.size) + 617 len 4]
+                    args arg1 - (arg1 * withdrawalFee / 10000), mem[ceil32(return_data.size) + 489 len 28], mem[ceil32(return_data.size) + 617 len 4]
             if not return_data.size:
                 require not ext_call.success
                 revert with 'SafeMath: division by zero'
@@ -415,7 +421,9 @@ function withdraw(uint256 arg1) payable {
             if not ext_call.success:
                 if return_data.size > 0:
                     revert with ext_call.return_data[0 len return_data.size]
-                revert with 0, 'SafeERC20: low-level call failed'
+                revert with 0, 
+                            'SafeERC20: low-level call failed',
+                            mem[(2 * ceil32(return_data.size)) + 654 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
             if return_data.size > 0:
                 require return_data.size >= 32
                 if not mem[ceil32(return_data.size) + 585]:
@@ -441,6 +449,7 @@ function withdraw(uint256 arg1) payable {
             if ext_code.size(wantAddress) <= 0:
                 revert with 0, 'Address: call to non-contract'
             mem[388 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor4), uint32(stor4), Mask(224, 32, arg1) >> 32
+            mem[452 len 0] = 0
             call wantAddress with:
                funct uint32(stor4)
                  gas gas_remaining wei
@@ -466,10 +475,11 @@ function withdraw(uint256 arg1) payable {
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
                 mem[388 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor3), uint32(stor3), 0
+                mem[452 len 0] = 0
                 call wantAddress with:
                    funct uint32(stor3)
                      gas gas_remaining wei
-                    args 0, mem[452 len 4]
+                    args Mask(480, -256, unknown_0xa9059cbb(?????), Mask(224, 0, stor3), uint32(stor3), 0) << 256, mem[452 len 4]
                 if not return_data.size:
                     require not ext_call.success
                     revert with 'SafeMath: subtraction overflow'
@@ -490,11 +500,11 @@ function withdraw(uint256 arg1) payable {
                     revert with 0, 'SafeMath: subtraction overflow'
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
-                mem[ceil32(return_data.size) + 617 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor4), uint32(stor4), Mask(224, 32, arg1) >> 32
+                mem[ceil32(return_data.size) + 617 len 64] = 0, address(vaultAddress), Mask(224, 32, arg1) >> 32
                 call wantAddress with:
                    funct uint32(stor4)
                      gas gas_remaining wei
-                    args Mask(224, 32, arg1) << 224, mem[ceil32(return_data.size) + 681 len 4]
+                    args arg1, mem[ceil32(return_data.size) + 553 len 28], mem[ceil32(return_data.size) + 681 len 4]
             else:
                 require arg1
                 if arg1 * withdrawalFee / arg1 != withdrawalFee:
@@ -502,6 +512,7 @@ function withdraw(uint256 arg1) payable {
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
                 mem[388 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor3), uint32(stor3), Mask(224, 32, arg1 * withdrawalFee / 10000) >> 32
+                mem[452 len 0] = 0
                 call wantAddress with:
                    funct uint32(stor3)
                      gas gas_remaining wei
@@ -526,11 +537,11 @@ function withdraw(uint256 arg1) payable {
                     revert with 0, 'SafeMath: subtraction overflow'
                 if ext_code.size(wantAddress) <= 0:
                     revert with 0, 'Address: call to non-contract'
-                mem[ceil32(return_data.size) + 617 len 64] = unknown_0xa9059cbb(?????), Mask(224, 0, stor4), uint32(stor4), Mask(224, 32, arg1 - (arg1 * withdrawalFee / 10000)) >> 32
+                mem[ceil32(return_data.size) + 617 len 64] = 0, address(vaultAddress), Mask(224, 32, arg1 - (arg1 * withdrawalFee / 10000)) >> 32
                 call wantAddress with:
                    funct uint32(stor4)
                      gas gas_remaining wei
-                    args Mask(224, 32, arg1 - (arg1 * withdrawalFee / 10000)) << 224, mem[ceil32(return_data.size) + 681 len 4]
+                    args arg1 - (arg1 * withdrawalFee / 10000), mem[ceil32(return_data.size) + 553 len 28], mem[ceil32(return_data.size) + 681 len 4]
             if not return_data.size:
                 require not ext_call.success
                 revert with 'SafeMath: subtraction overflow'
@@ -538,7 +549,9 @@ function withdraw(uint256 arg1) payable {
             if not ext_call.success:
                 if return_data.size > 0:
                     revert with ext_call.return_data[0 len return_data.size]
-                revert with 0, 'SafeERC20: low-level call failed'
+                revert with 0, 
+                            'SafeERC20: low-level call failed',
+                            mem[(2 * ceil32(return_data.size)) + 718 len (2 * ceil32(return_data.size)) - (2 * ceil32(return_data.size))]
             if return_data.size > 0:
                 require return_data.size >= 32
                 if not mem[ceil32(return_data.size) + 649]:
