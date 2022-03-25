@@ -1,0 +1,179 @@
+contract main {
+
+
+
+
+// =====================  Runtime code  =====================
+
+
+uint8 stor0;
+uint8 stor0; offset 8
+address chefAddress; offset 16
+uint256 stor0; offset 8
+address oldFactoryAddress;
+address factoryAddress;
+uint256 desiredLiquidity;
+address adminAddress;
+
+function oldFactory() payable {
+    return oldFactoryAddress
+}
+
+function chef() payable {
+    return chefAddress
+}
+
+function desiredLiquidity() payable {
+    return desiredLiquidity
+}
+
+function factory() payable {
+    return factoryAddress
+}
+
+function adminAddress() payable {
+    return adminAddress
+}
+
+function _fallback() payable {
+    revert
+}
+
+function setFactory(address arg1) payable {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if adminAddress != msg.sender:
+        revert with 0, 'admin: wut?'
+    factoryAddress = arg1
+}
+
+function sub_24ec7d5e(?) payable {
+    require calldata.size - 4 >= 32
+    require arg1 == address(arg1)
+    if adminAddress != msg.sender:
+        revert with 0, 'admin: wut?'
+    chefAddress = address(arg1)
+}
+
+function initialize(address arg1, address arg2, address arg3, address arg4) payable {
+    require calldata.size - 4 >= 128
+    require arg1 == arg1
+    require arg2 == arg2
+    require arg3 == arg3
+    require arg4 == arg4
+    if uint8(stor0.field_8):
+        chefAddress = arg1
+        oldFactoryAddress = arg2
+        factoryAddress = arg3
+        adminAddress = arg4
+    else:
+        if ext_code.size(this.address):
+            if uint8(stor0.field_0):
+                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'Initializable: contract is already initialized'
+        if uint8(stor0.field_8):
+            chefAddress = arg1
+            oldFactoryAddress = arg2
+            factoryAddress = arg3
+            adminAddress = arg4
+        else:
+            uint8(stor0.field_0) = 1
+            uint8(stor0.field_8) = 1
+            Mask(248, 0, stor0.field_8) = 0
+            chefAddress = arg1
+            oldFactoryAddress = arg2
+            factoryAddress = arg3
+            adminAddress = arg4
+            uint8(stor0.field_8) = 0
+}
+
+function migrate(address arg1) payable {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if chefAddress != msg.sender:
+        revert with 0, 'not from master chef'
+    require ext_code.size(arg1)
+    staticcall arg1.0xc45a0155 with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    if ext_call.return_data[12 len 20] != oldFactoryAddress:
+        revert with 0, 'not from old factory'
+    require ext_code.size(arg1)
+    staticcall arg1.token0() with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    require ext_code.size(arg1)
+    staticcall arg1.token1() with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    require ext_code.size(factoryAddress)
+    staticcall factoryAddress.0xe6a43905 with:
+            gas gas_remaining wei
+           args address(ext_call.return_data[0]), address(ext_call.return_data[0])
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    if not ext_call.return_data[12 len 20]:
+        require ext_code.size(factoryAddress)
+        call factoryAddress.0xc9c65396 with:
+             gas gas_remaining wei
+            args address(ext_call.return_data[0]), address(ext_call.return_data[0])
+        if not ext_call.success:
+            revert with ext_call.return_data[0 len return_data.size]
+        require return_data.size >= 32
+        require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    require ext_code.size(address(ext_call.return_data[0]))
+    staticcall address(ext_call.return_data[0]).0x18160ddd with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    if ext_call.return_data[0]:
+        revert with 0, 'pair must have no existing supply'
+    require ext_code.size(arg1)
+    staticcall arg1.0x70a08231 with:
+            gas gas_remaining wei
+           args msg.sender
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    if ext_call.return_data[0]:
+        desiredLiquidity = ext_call.return_data[0]
+        require ext_code.size(arg1)
+        call arg1.0x23b872dd with:
+             gas gas_remaining wei
+            args msg.sender, address(arg1), ext_call.return_data[0]
+        if not ext_call.success:
+            revert with ext_call.return_data[0 len return_data.size]
+        require return_data.size >= 32
+        require ext_call.return_data[0] == bool(ext_call.return_data[0])
+        require ext_code.size(arg1)
+        call arg1.burn(address rg1) with:
+             gas gas_remaining wei
+            args address(ext_call.return_data[0])
+        if not ext_call.success:
+            revert with ext_call.return_data[0 len return_data.size]
+        require return_data.size >= 64
+        require ext_code.size(address(ext_call.return_data[0]))
+        call address(ext_call.return_data[0]).mint(address rg1) with:
+             gas gas_remaining wei
+            args msg.sender
+        if not ext_call.success:
+            revert with ext_call.return_data[0 len return_data.size]
+        require return_data.size >= 32
+        desiredLiquidity = -1
+    return address(ext_call.return_data[0])
+}
+
+
+
+}
