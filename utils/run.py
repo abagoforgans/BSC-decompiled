@@ -226,15 +226,15 @@ def start(tx, creation_code):
 
 if(len(sys.argv) > 1):
     af = open('CURRENT_BLOCK', 'r')
-    new_num = int(af.read()) + 3000
+    new_num = int(af.read()) + 500
     af.close()
     bf = open('CURRENT_BLOCK', 'w')
     bf.write(str(new_num))
     bf.close()
     sys.exit(0)
 
-old_blocknumber = int(open('CURRENT_BLOCK', 'r').read()) - 3000
-new_blocknumber = old_blocknumber + 3000
+new_blocknumber = int(open('CURRENT_BLOCK', 'r').read())
+old_blocknumber = new_blocknumber - 500
 
 w3 = Web3(Web3.HTTPProvider('https://rpc.ankr.com/bsc'))
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)
