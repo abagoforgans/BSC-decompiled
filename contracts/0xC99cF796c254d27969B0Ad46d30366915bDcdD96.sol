@@ -1,0 +1,4092 @@
+contract main {
+
+
+
+
+// =====================  Runtime code  =====================
+
+
+#
+#  - transfer(address arg1, uint256 arg2)
+#
+const decimals = 18
+
+const VERSION = 1
+
+
+mapping of uint256 balanceOf;
+mapping of struct allowance;
+uint256 totalSupply;
+array of struct stor3;
+array of struct stor4;
+address owner;
+address uniswapV2RouterAddress;
+uint8 stor7; offset 160
+address uniswapV2PairAddress;
+address dividendTrackerAddress;
+address rewardTokenAddress;
+uint256 swapTokensAtAmount;
+uint256 tokenRewardsFee;
+uint256 liquidityFee;
+uint256 marketingFee;
+uint256 totalFees;
+address _marketingWalletAddress;
+uint256 gasForProcessing;
+mapping of uint8 stor17;
+mapping of uint8 stor18;
+
+function totalFees() {
+    return totalFees
+}
+
+function uniswapV2Router() {
+    return uniswapV2RouterAddress
+}
+
+function totalSupply() {
+    return totalSupply
+}
+
+function dividendTracker() {
+    return dividendTrackerAddress
+}
+
+function _marketingWalletAddress() {
+    return _marketingWalletAddress
+}
+
+function uniswapV2Pair() {
+    return uniswapV2PairAddress
+}
+
+function isExcludedFromFees(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    return bool(stor17[address(arg1)])
+}
+
+function marketingFee() {
+    return marketingFee
+}
+
+function balanceOf(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    return balanceOf[address(arg1)]
+}
+
+function owner() {
+    return owner
+}
+
+function liquidityFee() {
+    return liquidityFee
+}
+
+function gasForProcessing() {
+    return gasForProcessing
+}
+
+function automatedMarketMakerPairs(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    return bool(stor18[arg1])
+}
+
+function allowance(address arg1, address arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 == arg1
+    require arg2 == arg2
+    return allowance[address(arg1)][address(arg2)].field_0
+}
+
+function swapTokensAtAmount() {
+    return swapTokensAtAmount
+}
+
+function tokenRewardsFee() {
+    return tokenRewardsFee
+}
+
+function rewardToken() {
+    return rewardTokenAddress
+}
+
+function renounceOwnership() {
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    owner = 0
+    emit OwnershipTransferred(owner, 0);
+}
+
+function setSwapTokensAtAmount(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    swapTokensAtAmount = arg1
+}
+
+function setMarketingWallet(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    _marketingWalletAddress = arg1
+}
+
+function getClaimWait() {
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0x6f2789ec with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function getLastProcessedIndex() {
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0xe7841ec0 with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function getTotalDividendsDistributed() {
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0x85a6b3ae with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function getMinimumTokenBalanceForDividends() {
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0xbe10b614 with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function getNumberOfDividendTokenHolders() {
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.getNumberOfTokenHolders() with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function claim() {
+    require ext_code.size(dividendTrackerAddress)
+    call dividendTrackerAddress.0xbc4c4b37 with:
+         gas gas_remaining wei
+        args msg.sender, 0
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == bool(ext_call.return_data[0])
+}
+
+function dividendTokenBalanceOf(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0x70a08231 with:
+            gas gas_remaining wei
+           args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function withdrawableDividendOf(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0xa8b9d240 with:
+            gas gas_remaining wei
+           args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    return ext_call.return_data[0]
+}
+
+function transferOwnership(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    if not arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'Ownable: new owner is the zero address'
+    owner = arg1
+    emit OwnershipTransferred(owner, arg1);
+}
+
+function updateClaimWait(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    require ext_code.size(dividendTrackerAddress)
+    call dividendTrackerAddress.0xe98030c7 with:
+         gas gas_remaining wei
+        args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+}
+
+function excludeFromDividends(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    require ext_code.size(dividendTrackerAddress)
+    call dividendTrackerAddress.0x31e79db0 with:
+         gas gas_remaining wei
+        args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+}
+
+function processDividendTracker(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    require ext_code.size(dividendTrackerAddress)
+    call dividendTrackerAddress.0xffb2c479 with:
+         gas gas_remaining wei
+        args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 96
+    emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], arg1, 0, tx.origin);
+}
+
+function setTokenRewardsFee(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    tokenRewardsFee = arg1
+    if arg1 > !liquidityFee:
+        revert with 0, 17
+    if arg1 + liquidityFee > !marketingFee:
+        revert with 0, 17
+    totalFees = arg1 + liquidityFee + marketingFee
+    if 25 < arg1 + liquidityFee + marketingFee:
+        revert with 0, 'Total fee is over 25%'
+}
+
+function updateMinimumTokenBalanceForDividends(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    require ext_code.size(dividendTrackerAddress)
+    call dividendTrackerAddress.updateMinimumTokenBalanceForDividends(uint256 arg1) with:
+         gas gas_remaining wei
+        args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+}
+
+function setLiquiditFee(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    liquidityFee = arg1
+    if tokenRewardsFee > !arg1:
+        revert with 0, 17
+    if tokenRewardsFee + arg1 > !marketingFee:
+        revert with 0, 17
+    totalFees = tokenRewardsFee + arg1 + marketingFee
+    if 25 < tokenRewardsFee + arg1 + marketingFee:
+        revert with 0, 'Total fee is over 25%'
+}
+
+function isExcludedFromDividends(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0xc705c569 with:
+            gas gas_remaining wei
+           args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == bool(ext_call.return_data[0])
+    return bool(ext_call.return_data[0])
+}
+
+function setMarketingFee(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    marketingFee = arg1
+    if tokenRewardsFee > !liquidityFee:
+        revert with 0, 17
+    if tokenRewardsFee + liquidityFee > !arg1:
+        revert with 0, 17
+    totalFees = tokenRewardsFee + liquidityFee + arg1
+    if 25 < tokenRewardsFee + liquidityFee + arg1:
+        revert with 0, 'Total fee is over 25%'
+}
+
+function approve(address arg1, uint256 arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 == arg1
+    if not msg.sender:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+    if not arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+    allowance[address(msg.sender)][address(arg1)].field_0 = arg2
+    emit Approval(arg2, msg.sender, arg1);
+    return 1
+}
+
+function excludeFromFees(address arg1, bool arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 == arg1
+    require arg2 == arg2
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    if arg2 == bool(stor17[address(arg1)]):
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: Account is already the value of 'excluded''
+    stor17[address(arg1)] = uint8(arg2)
+    emit ExcludeFromFees(arg2, arg1);
+}
+
+function increaseAllowance(address arg1, uint256 arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 == arg1
+    if allowance[msg.sender][address(arg1)].field_0 > !arg2:
+        revert with 0, 17
+    if not msg.sender:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+    if not arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+    allowance[address(msg.sender)][address(arg1)].field_0 = allowance[msg.sender][address(arg1)].field_0 + arg2
+    emit Approval((allowance[msg.sender][address(arg1)].field_0 + arg2), msg.sender, arg1);
+    return 1
+}
+
+function getAccountDividendsInfoAtIndex(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0x5183d6fd with:
+            gas gas_remaining wei
+           args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 256
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    return ext_call.return_data[12 len 20], 
+           ext_call.return_data[32],
+           ext_call.return_data[64],
+           ext_call.return_data[96],
+           ext_call.return_data[128],
+           ext_call.return_data[160],
+           ext_call.return_data[192],
+           ext_call.return_data[224]
+}
+
+function getAccountDividendsInfo(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    require ext_code.size(dividendTrackerAddress)
+    staticcall dividendTrackerAddress.0xfbcbc0f1 with:
+            gas gas_remaining wei
+           args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 256
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    return ext_call.return_data[12 len 20], 
+           ext_call.return_data[32],
+           ext_call.return_data[64],
+           ext_call.return_data[96],
+           ext_call.return_data[128],
+           ext_call.return_data[160],
+           ext_call.return_data[192],
+           ext_call.return_data[224]
+}
+
+function decreaseAllowance(address arg1, uint256 arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 == arg1
+    if allowance[msg.sender][address(arg1)].field_0 < arg2:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: decreased allowance below zero'
+    if not msg.sender:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+    if not arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+    allowance[address(msg.sender)][address(arg1)].field_0 = allowance[msg.sender][address(arg1)].field_0 - arg2
+    emit Approval((allowance[msg.sender][address(arg1)].field_0 - arg2), msg.sender, arg1);
+    return 1
+}
+
+function updateGasForProcessing(uint256 arg1) {
+    require calldata.size - 4 >= 32
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    if arg1 < 200000:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: gasForProcessing must be between 200,000 and 500,000'
+    if arg1 > 500000:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: gasForProcessing must be between 200,000 and 500,000'
+    if arg1 == gasForProcessing:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: Cannot update gasForProcessing to same value'
+    emit GasForProcessingUpdated(arg1, gasForProcessing);
+    gasForProcessing = arg1
+}
+
+function setAutomatedMarketMakerPair(address arg1, bool arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 == arg1
+    require arg2 == arg2
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    if uniswapV2PairAddress == arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: The PancakeSwap pair cannot be removed from automatedMarketMakerPairs'
+    if arg2 == bool(stor18[address(arg1)]):
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: Automated market maker pair is already set to that value'
+    stor18[address(arg1)] = uint8(arg2)
+    if arg2:
+        require ext_code.size(dividendTrackerAddress)
+        call dividendTrackerAddress.0x31e79db0 with:
+             gas gas_remaining wei
+            args arg1
+        if not ext_call.success:
+            revert with ext_call.return_data[0 len return_data.size]
+    emit SetAutomatedMarketMakerPair(arg1, arg2);
+}
+
+function excludeMultipleAccountsFromFees(address[] arg1, bool arg2) {
+    require calldata.size - 4 >= 64
+    require arg1 <= test266151307()
+    require arg1 + 35 < calldata.size
+    require arg1.length <= test266151307()
+    require arg1 + (32 * arg1.length) + 36 <= calldata.size
+    require arg2 == arg2
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    idx = 0
+    while idx < arg1.length:
+        require cd[((32 * idx) + arg1 + 36)] == address(cd[((32 * idx) + arg1 + 36)])
+        mem[0] = address(cd[((32 * idx) + arg1 + 36)])
+        mem[32] = 17
+        stor17[address(cd[((32 * idx) + arg1 + 36)])] = uint8(arg2)
+        if idx == -1:
+            revert with 0, 17
+        idx = idx + 1
+        continue 
+    idx = 0
+    s = 192
+    t = arg1 + 36
+    while idx < arg1.length:
+        require cd[t] == address(cd[t])
+        mem[s] = address(cd[t])
+        idx = idx + 1
+        s = s + 32
+        t = t + 32
+        continue 
+    emit ExcludeMultipleAccountsFromFees(Array(len=arg1.length, data=mem[192 len 32 * arg1.length]), arg2);
+}
+
+function updateUniswapV2Router(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    if uniswapV2RouterAddress == arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'BABYTOKEN: The router already has that address'
+    emit UpdateUniswapV2Router(arg1, uniswapV2RouterAddress);
+    uniswapV2RouterAddress = arg1
+    require ext_code.size(arg1)
+    staticcall arg1.factory() with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    require ext_code.size(uniswapV2RouterAddress)
+    staticcall uniswapV2RouterAddress.0xad5c4648 with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    require ext_code.size(address(ext_call.return_data[0]))
+    call address(ext_call.return_data[0]).createPair(address arg1, address arg2) with:
+         gas gas_remaining wei
+        args address(this.address), address(ext_call.return_data[0])
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    uniswapV2PairAddress = ext_call.return_data[12 len 20]
+}
+
+function updateDividendTracker(address arg1) {
+    require calldata.size - 4 >= 32
+    require arg1 == arg1
+    if owner != msg.sender:
+        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+    if dividendTrackerAddress == arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                    'BABYTOKEN: The dividend tracker already has that address'
+    require ext_code.size(arg1)
+    staticcall arg1.0x8da5cb5b with:
+            gas gas_remaining wei
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require return_data.size >= 32
+    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+    if ext_call.return_data[12 len 20] != this.address:
+        revert with 0, 'BABYTOKEN: The new dividend tracker must be owned by the BABYTOKEN token contract'
+    require ext_code.size(arg1)
+    call arg1.0x31e79db0 with:
+         gas gas_remaining wei
+        args arg1
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require ext_code.size(arg1)
+    call arg1.0x31e79db0 with:
+         gas gas_remaining wei
+        args this.address
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require ext_code.size(arg1)
+    call arg1.0x31e79db0 with:
+         gas gas_remaining wei
+        args owner
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    require ext_code.size(arg1)
+    call arg1.0x31e79db0 with:
+         gas gas_remaining wei
+        args uniswapV2RouterAddress
+    if not ext_call.success:
+        revert with ext_call.return_data[0 len return_data.size]
+    emit UpdateDividendTracker(arg1, dividendTrackerAddress);
+    dividendTrackerAddress = arg1
+}
+
+function name() {
+    if bool(stor3.length):
+        if bool(stor3.length) == uint255(stor3.length) * 0.5 < 32:
+            revert with 0, 34
+        if bool(stor3.length):
+            if bool(stor3.length) == uint255(stor3.length) * 0.5 < 32:
+                revert with 0, 34
+            if Mask(256, -1, stor3.length):
+                if 31 < uint255(stor3.length) * 0.5:
+                    mem[128] = uint256(stor3.field_0)
+                    idx = 128
+                    s = 0
+                    while (uint255(stor3.length) * 0.5) + 96 > idx:
+                        mem[idx + 32] = stor3[s].field_256
+                        idx = idx + 32
+                        s = s + 1
+                        continue 
+                    return Array(len=2 * Mask(256, -1, stor3.length), data=mem[128 len ceil32(uint255(stor3.length) * 0.5)])
+                mem[128] = 256 * stor3.length.field_8
+        else:
+            if bool(stor3.length) == stor3.length.field_1 < 32:
+                revert with 0, 34
+            if stor3.length.field_1:
+                if 31 < stor3.length.field_1:
+                    mem[128] = uint256(stor3.field_0)
+                    idx = 128
+                    s = 0
+                    while stor3.length.field_1 + 96 > idx:
+                        mem[idx + 32] = stor3[s].field_256
+                        idx = idx + 32
+                        s = s + 1
+                        continue 
+                    return Array(len=2 * Mask(256, -1, stor3.length), data=mem[128 len ceil32(uint255(stor3.length) * 0.5)])
+                mem[128] = 256 * stor3.length.field_8
+        mem[ceil32(uint255(stor3.length) * 0.5) + 192 len ceil32(uint255(stor3.length) * 0.5)] = mem[128 len ceil32(uint255(stor3.length) * 0.5)]
+        if ceil32(uint255(stor3.length) * 0.5) > uint255(stor3.length) * 0.5:
+            mem[ceil32(uint255(stor3.length) * 0.5) + (uint255(stor3.length) * 0.5) + 192] = 0
+        return Array(len=2 * Mask(256, -1, stor3.length), data=mem[128 len ceil32(uint255(stor3.length) * 0.5)], mem[(2 * ceil32(uint255(stor3.length) * 0.5)) + 192 len 2 * ceil32(uint255(stor3.length) * 0.5)]), 
+    if bool(stor3.length) == stor3.length.field_1 < 32:
+        revert with 0, 34
+    if bool(stor3.length):
+        if bool(stor3.length) == uint255(stor3.length) * 0.5 < 32:
+            revert with 0, 34
+        if Mask(256, -1, stor3.length):
+            if 31 < uint255(stor3.length) * 0.5:
+                mem[128] = uint256(stor3.field_0)
+                idx = 128
+                s = 0
+                while (uint255(stor3.length) * 0.5) + 96 > idx:
+                    mem[idx + 32] = stor3[s].field_256
+                    idx = idx + 32
+                    s = s + 1
+                    continue 
+                return Array(len=stor3.length % 128, data=mem[128 len ceil32(stor3.length.field_1)])
+            mem[128] = 256 * stor3.length.field_8
+    else:
+        if bool(stor3.length) == stor3.length.field_1 < 32:
+            revert with 0, 34
+        if stor3.length.field_1:
+            if 31 < stor3.length.field_1:
+                mem[128] = uint256(stor3.field_0)
+                idx = 128
+                s = 0
+                while stor3.length.field_1 + 96 > idx:
+                    mem[idx + 32] = stor3[s].field_256
+                    idx = idx + 32
+                    s = s + 1
+                    continue 
+                return Array(len=stor3.length % 128, data=mem[128 len ceil32(stor3.length.field_1)])
+            mem[128] = 256 * stor3.length.field_8
+    mem[ceil32(stor3.length.field_1) + 192 len ceil32(stor3.length.field_1)] = mem[128 len ceil32(stor3.length.field_1)]
+    if ceil32(stor3.length.field_1) > stor3.length.field_1:
+        mem[ceil32(stor3.length.field_1) + stor3.length.field_1 + 192] = 0
+    return Array(len=stor3.length % 128, data=mem[128 len ceil32(stor3.length.field_1)], mem[(2 * ceil32(stor3.length.field_1)) + 192 len 2 * ceil32(stor3.length.field_1)]), 
+}
+
+function symbol() {
+    if bool(stor4.length):
+        if bool(stor4.length) == uint255(stor4.length) * 0.5 < 32:
+            revert with 0, 34
+        if bool(stor4.length):
+            if bool(stor4.length) == uint255(stor4.length) * 0.5 < 32:
+                revert with 0, 34
+            if Mask(256, -1, stor4.length):
+                if 31 < uint255(stor4.length) * 0.5:
+                    mem[128] = uint256(stor4.field_0)
+                    idx = 128
+                    s = 0
+                    while (uint255(stor4.length) * 0.5) + 96 > idx:
+                        mem[idx + 32] = stor4[s].field_256
+                        idx = idx + 32
+                        s = s + 1
+                        continue 
+                    return Array(len=2 * Mask(256, -1, stor4.length), data=mem[128 len ceil32(uint255(stor4.length) * 0.5)])
+                mem[128] = 256 * stor4.length.field_8
+        else:
+            if bool(stor4.length) == stor4.length.field_1 < 32:
+                revert with 0, 34
+            if stor4.length.field_1:
+                if 31 < stor4.length.field_1:
+                    mem[128] = uint256(stor4.field_0)
+                    idx = 128
+                    s = 0
+                    while stor4.length.field_1 + 96 > idx:
+                        mem[idx + 32] = stor4[s].field_256
+                        idx = idx + 32
+                        s = s + 1
+                        continue 
+                    return Array(len=2 * Mask(256, -1, stor4.length), data=mem[128 len ceil32(uint255(stor4.length) * 0.5)])
+                mem[128] = 256 * stor4.length.field_8
+        mem[ceil32(uint255(stor4.length) * 0.5) + 192 len ceil32(uint255(stor4.length) * 0.5)] = mem[128 len ceil32(uint255(stor4.length) * 0.5)]
+        if ceil32(uint255(stor4.length) * 0.5) > uint255(stor4.length) * 0.5:
+            mem[ceil32(uint255(stor4.length) * 0.5) + (uint255(stor4.length) * 0.5) + 192] = 0
+        return Array(len=2 * Mask(256, -1, stor4.length), data=mem[128 len ceil32(uint255(stor4.length) * 0.5)], mem[(2 * ceil32(uint255(stor4.length) * 0.5)) + 192 len 2 * ceil32(uint255(stor4.length) * 0.5)]), 
+    if bool(stor4.length) == stor4.length.field_1 < 32:
+        revert with 0, 34
+    if bool(stor4.length):
+        if bool(stor4.length) == uint255(stor4.length) * 0.5 < 32:
+            revert with 0, 34
+        if Mask(256, -1, stor4.length):
+            if 31 < uint255(stor4.length) * 0.5:
+                mem[128] = uint256(stor4.field_0)
+                idx = 128
+                s = 0
+                while (uint255(stor4.length) * 0.5) + 96 > idx:
+                    mem[idx + 32] = stor4[s].field_256
+                    idx = idx + 32
+                    s = s + 1
+                    continue 
+                return Array(len=stor4.length % 128, data=mem[128 len ceil32(stor4.length.field_1)])
+            mem[128] = 256 * stor4.length.field_8
+    else:
+        if bool(stor4.length) == stor4.length.field_1 < 32:
+            revert with 0, 34
+        if stor4.length.field_1:
+            if 31 < stor4.length.field_1:
+                mem[128] = uint256(stor4.field_0)
+                idx = 128
+                s = 0
+                while stor4.length.field_1 + 96 > idx:
+                    mem[idx + 32] = stor4[s].field_256
+                    idx = idx + 32
+                    s = s + 1
+                    continue 
+                return Array(len=stor4.length % 128, data=mem[128 len ceil32(stor4.length.field_1)])
+            mem[128] = 256 * stor4.length.field_8
+    mem[ceil32(stor4.length.field_1) + 192 len ceil32(stor4.length.field_1)] = mem[128 len ceil32(stor4.length.field_1)]
+    if ceil32(stor4.length.field_1) > stor4.length.field_1:
+        mem[ceil32(stor4.length.field_1) + stor4.length.field_1 + 192] = 0
+    return Array(len=stor4.length % 128, data=mem[128 len ceil32(stor4.length.field_1)], mem[(2 * ceil32(stor4.length.field_1)) + 192 len 2 * ceil32(stor4.length.field_1)]), 
+}
+
+function _fallback() payable {
+    if calldata.size < 4:
+        require not calldata.size
+    if unknown_0x88bdd9be(?????) > uint32(call.func_hash) >> 224:
+        if unknown_0x49bd5a5e(?????) <= uint32(call.func_hash) >> 224:
+            if unknown_0x65b8dbc0(?????) > uint32(call.func_hash) >> 224:
+                if unknown_0x4fbee193(?????) > uint32(call.func_hash) >> 224:
+                    if unknown_0x49bd5a5e(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        return uniswapV2PairAddress
+                    if unknown_0x4e71d92d(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require ext_code.size(dividendTrackerAddress)
+                        call dividendTrackerAddress.0xbc4c4b37 with:
+                             gas gas_remaining wei
+                            args msg.sender, 0
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 32
+                        require ext_call.return_data[0] == bool(ext_call.return_data[0])
+                    else:
+                        require unknown_0x4ed080c7(?????) == uint32(call.func_hash) >> 224
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        if owner != msg.sender:
+                            revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                        tokenRewardsFee = cd[4]
+                        if cd[4] > !liquidityFee:
+                            revert with 0, 17
+                        if cd[4] + liquidityFee > !marketingFee:
+                            revert with 0, 17
+                        totalFees = cd[4] + liquidityFee + marketingFee
+                        if 25 < cd[4] + liquidityFee + marketingFee:
+                            revert with 0, 'Total fee is over 25%'
+                else:
+                    if unknown_0x4fbee193(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require cd[4] == address(cd[4])
+                        return bool(stor17[address(cd[4])])
+                    if unknown_0x5d098b38(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require cd[4] == address(cd[4])
+                        if owner != msg.sender:
+                            revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                        _marketingWalletAddress = address(cd[4])
+                    else:
+                        if uint32(call.func_hash) >> 224 != unknown_0x625e764c(?????):
+                            require unknown_0x64b0f653(?????) == uint32(call.func_hash) >> 224
+                            require not msg.value
+                            require ext_code.size(dividendTrackerAddress)
+                            staticcall dividendTrackerAddress.getNumberOfTokenHolders() with:
+                                    gas gas_remaining wei
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            require return_data.size >= 32
+                            return ext_call.return_data[0]
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        if owner != msg.sender:
+                            revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                        marketingFee = cd[4]
+                        if tokenRewardsFee > !liquidityFee:
+                            revert with 0, 17
+                        if tokenRewardsFee + liquidityFee > !cd[4]:
+                            revert with 0, 17
+                        totalFees = tokenRewardsFee + liquidityFee + cd[4]
+                        if 25 < tokenRewardsFee + liquidityFee + cd[4]:
+                            revert with 0, 'Total fee is over 25%'
+            else:
+                if unknown_0x700bb191(?????) <= uint32(call.func_hash) >> 224:
+                    if unknown_0x700bb191(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require ext_code.size(dividendTrackerAddress)
+                        call dividendTrackerAddress.0xffb2c479 with:
+                             gas gas_remaining wei
+                            args cd[4]
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 96
+                        emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], cd[4], 0, tx.origin);
+                    else:
+                        if unknown_0x70a08231(?????) == uint32(call.func_hash) >> 224:
+                            require not msg.value
+                            require calldata.size - 4 >= 32
+                            require cd[4] == address(cd[4])
+                            return balanceOf[address(cd[4])]
+                        if unknown_0x715018a6(?????) == uint32(call.func_hash) >> 224:
+                            require not msg.value
+                            if owner != msg.sender:
+                                revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                            owner = 0
+                            emit OwnershipTransferred(owner, 0);
+                        else:
+                            require unknown_0x871c128d(?????) == uint32(call.func_hash) >> 224
+                            require not msg.value
+                            require calldata.size - 4 >= 32
+                            if owner != msg.sender:
+                                revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                            if cd[4] < 200000:
+                                revert with 0, 'BABYTOKEN: gasForProcessing must be between 200,000 and 500,000'
+                            if cd[4] > 500000:
+                                revert with 0, 'BABYTOKEN: gasForProcessing must be between 200,000 and 500,000'
+                            if cd[4] == gasForProcessing:
+                                revert with 0, 'BABYTOKEN: Cannot update gasForProcessing to same value'
+                            emit GasForProcessingUpdated(cd[4], gasForProcessing);
+                            gasForProcessing = cd[4]
+                else:
+                    if uint32(call.func_hash) >> 224 != unknown_0x65b8dbc0(?????):
+                        if uint32(call.func_hash) >> 224 != unknown_0x6843cd84(?????):
+                            require unknown_0x6b67c4df(?????) == uint32(call.func_hash) >> 224
+                            require not msg.value
+                            return marketingFee
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require cd[4] == address(cd[4])
+                        require ext_code.size(dividendTrackerAddress)
+                        staticcall dividendTrackerAddress.0x70a08231 with:
+                                gas gas_remaining wei
+                               args address(cd[4])
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 32
+                        return ext_call.return_data[0]
+                    require not msg.value
+                    require calldata.size - 4 >= 32
+                    require cd[4] == address(cd[4])
+                    if owner != msg.sender:
+                        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                    if uniswapV2RouterAddress == address(cd[4]):
+                        revert with 0, 'BABYTOKEN: The router already has that address'
+                    emit UpdateUniswapV2Router(address(cd[4]), uniswapV2RouterAddress);
+                    uniswapV2RouterAddress = address(cd[4])
+                    require ext_code.size(address(cd[4]))
+                    staticcall address(cd[4]).factory() with:
+                            gas gas_remaining wei
+                    if not ext_call.success:
+                        revert with ext_call.return_data[0 len return_data.size]
+                    require return_data.size >= 32
+                    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                    require ext_code.size(uniswapV2RouterAddress)
+                    staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                            gas gas_remaining wei
+                    if not ext_call.success:
+                        revert with ext_call.return_data[0 len return_data.size]
+                    require return_data.size >= 32
+                    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                    require ext_code.size(address(ext_call.return_data[0]))
+                    call address(ext_call.return_data[0]).createPair(address arg1, address arg2) with:
+                         gas gas_remaining wei
+                        args address(this.address), address(ext_call.return_data[0])
+                    if not ext_call.success:
+                        revert with ext_call.return_data[0 len return_data.size]
+                    require return_data.size >= 32
+                    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                    uniswapV2PairAddress = ext_call.return_data[12 len 20]
+        if unknown_0x23b872dd(?????) > uint32(call.func_hash) >> 224:
+            if unknown_0x13114a9d(?????) <= uint32(call.func_hash) >> 224:
+                if unknown_0x13114a9d(?????) == uint32(call.func_hash) >> 224:
+                    require not msg.value
+                    return totalFees
+                if unknown_0x1694505e(?????) == uint32(call.func_hash) >> 224:
+                    require not msg.value
+                    return uniswapV2RouterAddress
+                require unknown_0x18160ddd(?????) == uint32(call.func_hash) >> 224
+                require not msg.value
+                return totalSupply
+            if uint32(call.func_hash) >> 224 != name():
+                if approve(address arg1, uint256 arg2) == uint32(call.func_hash) >> 224:
+                    require not msg.value
+                    require calldata.size - 4 >= 64
+                    require cd[4] == address(cd[4])
+                    if not msg.sender:
+                        revert with 0, 'ERC20: approve from the zero address'
+                    if not address(cd[4]):
+                        revert with 0, 'ERC20: approve to the zero address'
+                    allowance[address(msg.sender)][address(cd[4])].field_0 = cd[36]
+                    emit Approval(cd[36], msg.sender, address(cd[4]));
+                    return 1
+                require updateMinimumTokenBalanceForDividends(uint256 arg1) == uint32(call.func_hash) >> 224
+                require not msg.value
+                require calldata.size - 4 >= 32
+                if owner != msg.sender:
+                    revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.updateMinimumTokenBalanceForDividends(uint256 arg1) with:
+                     gas gas_remaining wei
+                    args cd[4]
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+            require not msg.value
+            if bool(stor3.length):
+                if bool(stor3.length) == uint255(stor3.length) * 0.5 < 32:
+                    revert with 0, 34
+                if bool(stor3.length):
+                    if bool(stor3.length) == uint255(stor3.length) * 0.5 < 32:
+                        revert with 0, 34
+                    if Mask(256, -1, stor3.length):
+                        if 31 < uint255(stor3.length) * 0.5:
+                            mem[160] = uint256(stor3.field_0)
+                            idx = 160
+                            s = 0
+                            while (uint255(stor3.length) * 0.5) + 128 > idx:
+                                mem[idx + 32] = stor3[s].field_256
+                                idx = idx + 32
+                                s = s + 1
+                                continue 
+                            return Array(len=2 * Mask(256, -1, stor3.length), data=mem[160 len ceil32(uint255(stor3.length) * 0.5)])
+                        mem[160] = 256 * stor3.length.field_8
+                else:
+                    if bool(stor3.length) == stor3.length.field_1 < 32:
+                        revert with 0, 34
+                    if stor3.length.field_1:
+                        if 31 < stor3.length.field_1:
+                            mem[160] = uint256(stor3.field_0)
+                            idx = 160
+                            s = 0
+                            while stor3.length.field_1 + 128 > idx:
+                                mem[idx + 32] = stor3[s].field_256
+                                idx = idx + 32
+                                s = s + 1
+                                continue 
+                            return Array(len=2 * Mask(256, -1, stor3.length), data=mem[160 len ceil32(uint255(stor3.length) * 0.5)])
+                        mem[160] = 256 * stor3.length.field_8
+                mem[ceil32(uint255(stor3.length) * 0.5) + 224 len ceil32(uint255(stor3.length) * 0.5)] = mem[160 len ceil32(uint255(stor3.length) * 0.5)]
+                if ceil32(uint255(stor3.length) * 0.5) > uint255(stor3.length) * 0.5:
+                    mem[ceil32(uint255(stor3.length) * 0.5) + (uint255(stor3.length) * 0.5) + 224] = 0
+                return Array(len=2 * Mask(256, -1, stor3.length), data=mem[160 len ceil32(uint255(stor3.length) * 0.5)], mem[(2 * ceil32(uint255(stor3.length) * 0.5)) + 224 len 2 * ceil32(uint255(stor3.length) * 0.5)]), 
+            if bool(stor3.length) == stor3.length.field_1 < 32:
+                revert with 0, 34
+            if bool(stor3.length):
+                if bool(stor3.length) == uint255(stor3.length) * 0.5 < 32:
+                    revert with 0, 34
+                if Mask(256, -1, stor3.length):
+                    if 31 < uint255(stor3.length) * 0.5:
+                        mem[160] = uint256(stor3.field_0)
+                        idx = 160
+                        s = 0
+                        while (uint255(stor3.length) * 0.5) + 128 > idx:
+                            mem[idx + 32] = stor3[s].field_256
+                            idx = idx + 32
+                            s = s + 1
+                            continue 
+                        return Array(len=stor3.length % 128, data=mem[160 len ceil32(stor3.length.field_1)])
+                    mem[160] = 256 * stor3.length.field_8
+            else:
+                if bool(stor3.length) == stor3.length.field_1 < 32:
+                    revert with 0, 34
+                if stor3.length.field_1:
+                    if 31 < stor3.length.field_1:
+                        mem[160] = uint256(stor3.field_0)
+                        idx = 160
+                        s = 0
+                        while stor3.length.field_1 + 128 > idx:
+                            mem[idx + 32] = stor3[s].field_256
+                            idx = idx + 32
+                            s = s + 1
+                            continue 
+                        return Array(len=stor3.length % 128, data=mem[160 len ceil32(stor3.length.field_1)])
+                    mem[160] = 256 * stor3.length.field_8
+            mem[ceil32(stor3.length.field_1) + 224 len ceil32(stor3.length.field_1)] = mem[160 len ceil32(stor3.length.field_1)]
+            if ceil32(stor3.length.field_1) > stor3.length.field_1:
+                mem[ceil32(stor3.length.field_1) + stor3.length.field_1 + 224] = 0
+            return Array(len=stor3.length % 128, data=mem[160 len ceil32(stor3.length.field_1)], mem[(2 * ceil32(stor3.length.field_1)) + 224 len 2 * ceil32(stor3.length.field_1)]), 
+        if unknown_0x313ce567(?????) <= uint32(call.func_hash) >> 224:
+            if unknown_0x313ce567(?????) == uint32(call.func_hash) >> 224:
+                require not msg.value
+                return 18
+            if unknown_0x31e79db0(?????) == uint32(call.func_hash) >> 224:
+                require not msg.value
+                require calldata.size - 4 >= 32
+                require cd[4] == address(cd[4])
+                if owner != msg.sender:
+                    revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0x31e79db0 with:
+                     gas gas_remaining wei
+                    args address(cd[4])
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+            if uint32(call.func_hash) >> 224 != unknown_0x39509351(?????):
+                require unknown_0x4144d9e4(?????) == uint32(call.func_hash) >> 224
+                require not msg.value
+                return _marketingWalletAddress
+            require not msg.value
+            require calldata.size - 4 >= 64
+            require cd[4] == address(cd[4])
+            if allowance[msg.sender][address(cd[4])].field_0 > !cd[36]:
+                revert with 0, 17
+            if not msg.sender:
+                revert with 0, 'ERC20: approve from the zero address'
+            if not address(cd[4]):
+                revert with 0, 'ERC20: approve to the zero address'
+            allowance[address(msg.sender)][address(cd[4])].field_0 = allowance[msg.sender][address(cd[4])].field_0 + cd[36]
+            emit Approval((allowance[msg.sender][address(cd[4])].field_0 + cd[36]), msg.sender, address(cd[4]));
+        else:
+            if uint32(call.func_hash) >> 224 != unknown_0x23b872dd(?????):
+                if unknown_0x2c1f5216(?????) == uint32(call.func_hash) >> 224:
+                    require not msg.value
+                    return dividendTrackerAddress
+                require unknown_0x30bb4cff(?????) == uint32(call.func_hash) >> 224
+                require not msg.value
+                require ext_code.size(dividendTrackerAddress)
+                staticcall dividendTrackerAddress.0x85a6b3ae with:
+                        gas gas_remaining wei
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                require return_data.size >= 32
+                return ext_call.return_data[0]
+            require not msg.value
+            require calldata.size - 4 >= 96
+            require cd[4] == address(cd[4])
+            require cd[36] == address(cd[36])
+            if not address(cd[4]):
+                revert with 0, 'ERC20: transfer from the zero address'
+            if not address(cd[36]):
+                revert with 0, 'ERC20: transfer to the zero address'
+            if not cd[68]:
+                if not address(cd[4]):
+                    revert with 0, 'ERC20: transfer from the zero address'
+                if not address(cd[36]):
+                    revert with 0, 'ERC20: transfer to the zero address'
+                if balanceOf[address(cd[4])] < 0:
+                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                if balanceOf[address(cd[36])] > -1:
+                    revert with 0, 17
+                emit Transfer(0, address(cd[4]), address(cd[36]));
+            else:
+                if balanceOf[this.address] >= swapTokensAtAmount:
+                    if not stor7:
+                        if not stor18[address(cd[4])]:
+                            if owner != address(cd[4]):
+                                if owner != address(cd[36]):
+                                    stor7 = 1
+                                    if balanceOf[this.address] and marketingFee > -1 / balanceOf[this.address]:
+                                        revert with 0, 17
+                                    if not totalFees:
+                                        revert with 0, 18
+                                    mem[132] = this.address
+                                    require ext_code.size(rewardTokenAddress)
+                                    staticcall rewardTokenAddress.0x70a08231 with:
+                                            gas gas_remaining wei
+                                           args this.address
+                                    mem[128] = ext_call.return_data[0]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    mem[ceil32(return_data.size) + 128] = 3
+                                    mem[ceil32(return_data.size) + 160] = this.address
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                            gas gas_remaining wei
+                                    mem[ceil32(return_data.size) + 256] = ext_call.return_data[0]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                                    mem[ceil32(return_data.size) + 192] = ext_call.return_data[12 len 20]
+                                    mem[ceil32(return_data.size) + 224] = rewardTokenAddress
+                                    if not this.address:
+                                        mem[(2 * ceil32(return_data.size)) + 256] = 0x8c379a000000000000000000000000000000000000000000000000000000000
+                                        mem[(2 * ceil32(return_data.size)) + 260] = 32
+                                        mem[(2 * ceil32(return_data.size)) + 292] = 36
+                                        mem[(2 * ceil32(return_data.size)) + 324] = 'ERC20: approve from the zero add'
+                                        mem[(2 * ceil32(return_data.size)) + 356] = 'ress'
+                                        revert with memory
+                                          from (2 * ceil32(return_data.size)) + 256
+                                           len ceil32(return_data.size) + 132
+                                    if not uniswapV2RouterAddress:
+                                        mem[(2 * ceil32(return_data.size)) + 256] = 0x8c379a000000000000000000000000000000000000000000000000000000000
+                                        mem[(2 * ceil32(return_data.size)) + 260] = 32
+                                        mem[(2 * ceil32(return_data.size)) + 292] = 34
+                                        mem[(2 * ceil32(return_data.size)) + 324] = 'ERC20: approve to the zero addre'
+                                        mem[(2 * ceil32(return_data.size)) + 356] = 'ss'
+                                        revert with memory
+                                          from (2 * ceil32(return_data.size)) + 256
+                                           len ceil32(return_data.size) + 132
+                                    allowance[address(this.address)][stor6].field_0 = balanceOf[this.address] * marketingFee / totalFees
+                                    mem[(2 * ceil32(return_data.size)) + 256] = balanceOf[this.address] * marketingFee / totalFees
+                                    emit Approval(mem[(2 * ceil32(return_data.size)) + 256 len ceil32(return_data.size) + 32], this.address, uniswapV2RouterAddress);
+                                    mem[(2 * ceil32(return_data.size)) + 256] = 0x5c11d79500000000000000000000000000000000000000000000000000000000
+                                    mem[(2 * ceil32(return_data.size)) + 260] = balanceOf[this.address] * marketingFee / totalFees
+                                    mem[(2 * ceil32(return_data.size)) + 292] = 0
+                                    mem[(2 * ceil32(return_data.size)) + 324] = 160
+                                    mem[(2 * ceil32(return_data.size)) + 420] = 3
+                                    idx = 0
+                                    s = (2 * ceil32(return_data.size)) + 452
+                                    t = ceil32(return_data.size) + 160
+                                    while idx < mem[ceil32(return_data.size) + 128]:
+                                        mem[s] = mem[t + 12 len 20]
+                                        idx = idx + 1
+                                        s = s + 32
+                                        t = t + 32
+                                        continue 
+                                    mem[(2 * ceil32(return_data.size)) + 356] = this.address
+                                    mem[(2 * ceil32(return_data.size)) + 388] = block.timestamp
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    call uniswapV2RouterAddress.swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256 arg1, uint256 arg2, address[] arg3, address arg4, uint256 arg5) with:
+                                         gas gas_remaining wei
+                                        args balanceOf[this.address] * marketingFee / totalFees, 0, 160, address(this.address), block.timestamp, mem[(2 * ceil32(return_data.size)) + 420 len (32 * mem[ceil32(return_data.size) + 128]) + 32]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    mem[(2 * ceil32(return_data.size)) + 260] = this.address
+                                    require ext_code.size(rewardTokenAddress)
+                                    staticcall rewardTokenAddress.0x70a08231 with:
+                                            gas gas_remaining wei
+                                           args this.address
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    if ext_call.return_data[0] < ext_call.return_data[0]:
+                                        revert with 0, 17
+                                    mem[(4 * ceil32(return_data.size)) + 260] = _marketingWalletAddress
+                                    mem[(4 * ceil32(return_data.size)) + 292] = 0
+                                    require ext_code.size(rewardTokenAddress)
+                                    call rewardTokenAddress.0xa9059cbb with:
+                                         gas gas_remaining wei
+                                        args _marketingWalletAddress, 0
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    require ext_call.return_data[0] == bool(ext_call.return_data[0])
+                                    if balanceOf[this.address] and liquidityFee > -1 / balanceOf[this.address]:
+                                        revert with 0, 17
+                                    if not totalFees:
+                                        revert with 0, 18
+                                    if balanceOf[this.address] * liquidityFee / totalFees < balanceOf[this.address] * liquidityFee / totalFees / 2:
+                                        revert with 0, 17
+                                    mem[(6 * ceil32(return_data.size)) + 288] = this.address
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                            gas gas_remaining wei
+                                    mem[(6 * ceil32(return_data.size)) + 352] = ext_call.return_data[0]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                                    mem[(6 * ceil32(return_data.size)) + 320] = ext_call.return_data[12 len 20]
+                                    if not this.address:
+                                        revert with 0, 'ERC20: approve from the zero address'
+                                    if not uniswapV2RouterAddress:
+                                        revert with 0, 'ERC20: approve to the zero address'
+                                    allowance[address(this.address)][stor6].field_0 = balanceOf[this.address] * liquidityFee / totalFees / 2
+                                    allowance[address(this.address)][stor6].field_255 = 0
+                                    emit Approval((balanceOf[this.address] * liquidityFee / totalFees / 2), this.address, uniswapV2RouterAddress);
+                                    mem[(7 * ceil32(return_data.size)) + 352] = 0x791ac94700000000000000000000000000000000000000000000000000000000
+                                    mem[(7 * ceil32(return_data.size)) + 356] = balanceOf[this.address] * liquidityFee / totalFees / 2
+                                    idx = 0
+                                    s = (7 * ceil32(return_data.size)) + 548
+                                    t = (6 * ceil32(return_data.size)) + 288
+                                    while idx < 2:
+                                        mem[s] = mem[t + 12 len 20]
+                                        idx = idx + 1
+                                        s = s + 32
+                                        t = t + 32
+                                        continue 
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    call uniswapV2RouterAddress.swapExactTokensForETHSupportingFeeOnTransferTokens(uint256 arg1, uint256 arg2, address[] arg3, address arg4, uint256 arg5) with:
+                                         gas gas_remaining wei
+                                        args Mask(255, 1, balanceOf[this.address] * liquidityFee / totalFees), 0, 160, address(this.address), block.timestamp, 2, mem[(7 * ceil32(return_data.size)) + 548 len 64]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    if eth.balance(this.address) < eth.balance(this.address):
+                                        revert with 0, 17
+                                    if not this.address:
+                                        revert with 0, 'ERC20: approve from the zero address'
+                                    if not uniswapV2RouterAddress:
+                                        revert with 0, 'ERC20: approve to the zero address'
+                                    allowance[address(this.address)][stor6].field_0 = (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)
+                                    emit Approval(((balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)), this.address, uniswapV2RouterAddress);
+                                    mem[(7 * ceil32(return_data.size)) + 420] = 0
+                                    mem[(7 * ceil32(return_data.size)) + 452] = 0
+                                    mem[(7 * ceil32(return_data.size)) + 484] = 0
+                                    mem[(7 * ceil32(return_data.size)) + 516] = block.timestamp
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    call uniswapV2RouterAddress.addLiquidityETH(address arg1, uint256 arg2, uint256 arg3, uint256 arg4, address arg5, uint256 arg6) with:
+                                         gas gas_remaining wei
+                                        args this.address, (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2), 0, 0, 0, block.timestamp
+                                    mem[(7 * ceil32(return_data.size)) + 352 len 96] = ext_call.return_data[0 len 96]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 96
+                                    emit SwapAndLiquify(uint256 arg1, uint256 arg2, uint256 arg3):
+                                                        Mask(255, 1, balanceOf[this.address] * liquidityFee / totalFees),
+                                                        0,
+                                                        (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2),
+                                                        mem[(9 * ceil32(return_data.size)) + 448 len 5 * ceil32(return_data.size)],
+                                    mem[(9 * ceil32(return_data.size)) + 384] = this.address
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                            gas gas_remaining wei
+                                    mem[(9 * ceil32(return_data.size)) + 480] = ext_call.return_data[0]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                                    mem[(9 * ceil32(return_data.size)) + 416] = ext_call.return_data[12 len 20]
+                                    mem[(9 * ceil32(return_data.size)) + 448] = rewardTokenAddress
+                                    if not this.address:
+                                        revert with 0, 'ERC20: approve from the zero address'
+                                    if not uniswapV2RouterAddress:
+                                        revert with 0, 'ERC20: approve to the zero address'
+                                    allowance[address(this.address)][stor6].field_0 = balanceOf[this.address]
+                                    emit Approval(balanceOf[this.address], this.address, uniswapV2RouterAddress);
+                                    mem[(10 * ceil32(return_data.size)) + 480] = 0x5c11d79500000000000000000000000000000000000000000000000000000000
+                                    mem[(10 * ceil32(return_data.size)) + 484] = balanceOf[this.address]
+                                    idx = 0
+                                    s = (10 * ceil32(return_data.size)) + 676
+                                    t = (9 * ceil32(return_data.size)) + 384
+                                    while idx < 3:
+                                        mem[s] = mem[t + 12 len 20]
+                                        idx = idx + 1
+                                        s = s + 32
+                                        t = t + 32
+                                        continue 
+                                    require ext_code.size(uniswapV2RouterAddress)
+                                    call uniswapV2RouterAddress.swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256 arg1, uint256 arg2, address[] arg3, address arg4, uint256 arg5) with:
+                                         gas gas_remaining wei
+                                        args balanceOf[this.address], 0, 160, address(this.address), block.timestamp, 3, mem[(10 * ceil32(return_data.size)) + 676 len 96]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require ext_code.size(rewardTokenAddress)
+                                    staticcall rewardTokenAddress.0x70a08231 with:
+                                            gas gas_remaining wei
+                                           args this.address
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    require ext_code.size(rewardTokenAddress)
+                                    call rewardTokenAddress.0xa9059cbb with:
+                                         gas gas_remaining wei
+                                        args dividendTrackerAddress, ext_call.return_data[0]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    require return_data.size >= 32
+                                    require ext_call.return_data[0] == bool(ext_call.return_data[0])
+                                    if ext_call.return_data[0]:
+                                        require ext_code.size(dividendTrackerAddress)
+                                        call dividendTrackerAddress.0xba72a955 with:
+                                             gas gas_remaining wei
+                                            args ext_call.return_data[0]
+                                        if not ext_call.success:
+                                            revert with ext_call.return_data[0 len return_data.size]
+                                        emit SendDividends(balanceOf[this.address], ext_call.return_data[0]);
+                                    stor7 = 0
+                if stor17[address(cd[4])]:
+                    if not address(cd[4]):
+                        revert with 0, 'ERC20: transfer from the zero address'
+                    if not address(cd[36]):
+                        revert with 0, 'ERC20: transfer to the zero address'
+                    if balanceOf[address(cd[4])] < cd[68]:
+                        revert with 0, 'ERC20: transfer amount exceeds balance'
+                    balanceOf[address(cd[4])] -= cd[68]
+                    if balanceOf[address(cd[36])] > !cd[68]:
+                        revert with 0, 17
+                    balanceOf[address(cd[36])] += cd[68]
+                    emit Transfer(cd[68], address(cd[4]), address(cd[36]));
+                else:
+                    if stor17[address(cd[36])]:
+                        if not address(cd[4]):
+                            revert with 0, 'ERC20: transfer from the zero address'
+                        if not address(cd[36]):
+                            revert with 0, 'ERC20: transfer to the zero address'
+                        if balanceOf[address(cd[4])] < cd[68]:
+                            revert with 0, 'ERC20: transfer amount exceeds balance'
+                        balanceOf[address(cd[4])] -= cd[68]
+                        if balanceOf[address(cd[36])] > !cd[68]:
+                            revert with 0, 17
+                        balanceOf[address(cd[36])] += cd[68]
+                        emit Transfer(cd[68], address(cd[4]), address(cd[36]));
+                    else:
+                        if stor7:
+                            if not address(cd[4]):
+                                revert with 0, 'ERC20: transfer from the zero address'
+                            if not address(cd[36]):
+                                revert with 0, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(cd[4])] < cd[68]:
+                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(cd[4])] -= cd[68]
+                            if balanceOf[address(cd[36])] > !cd[68]:
+                                revert with 0, 17
+                            balanceOf[address(cd[36])] += cd[68]
+                            emit Transfer(cd[68], address(cd[4]), address(cd[36]));
+                        else:
+                            if cd[68] and totalFees > -1 / cd[68]:
+                                revert with 0, 17
+                            if not stor18[address(cd[36])]:
+                                if cd[68] < cd[68] * totalFees / 100:
+                                    revert with 0, 17
+                                if not address(cd[4]):
+                                    revert with 0, 'ERC20: transfer from the zero address'
+                                if not this.address:
+                                    revert with 0, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(cd[4])] < cd[68] * totalFees / 100:
+                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(cd[4])] -= cd[68] * totalFees / 100
+                                if balanceOf[this.address] > !(cd[68] * totalFees / 100):
+                                    revert with 0, 17
+                                balanceOf[this.address] += cd[68] * totalFees / 100
+                                emit Transfer((cd[68] * totalFees / 100), address(cd[4]), this.address);
+                                if not address(cd[4]):
+                                    revert with 0, 'ERC20: transfer from the zero address'
+                                if not address(cd[36]):
+                                    revert with 0, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(cd[4])] < cd[68] - (cd[68] * totalFees / 100):
+                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(cd[4])] = balanceOf[address(cd[4])] - cd[68] + (cd[68] * totalFees / 100)
+                                if balanceOf[address(cd[36])] > !(cd[68] - (cd[68] * totalFees / 100)):
+                                    revert with 0, 17
+                                balanceOf[address(cd[36])] = balanceOf[address(cd[36])] + cd[68] - (cd[68] * totalFees / 100)
+                                emit Transfer((cd[68] - (cd[68] * totalFees / 100)), address(cd[4]), address(cd[36]));
+                            else:
+                                if cd[68] and 1 > -1 / cd[68]:
+                                    revert with 0, 17
+                                if cd[68] * totalFees / 100 > !(cd[68] / 100):
+                                    revert with 0, 17
+                                if cd[68] < (cd[68] * totalFees / 100) + (cd[68] / 100):
+                                    revert with 0, 17
+                                if not address(cd[4]):
+                                    revert with 0, 'ERC20: transfer from the zero address'
+                                if not this.address:
+                                    revert with 0, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(cd[4])] < (cd[68] * totalFees / 100) + (cd[68] / 100):
+                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(cd[4])] = balanceOf[address(cd[4])] - (cd[68] * totalFees / 100) - (cd[68] / 100)
+                                if balanceOf[this.address] > !((cd[68] * totalFees / 100) + (cd[68] / 100)):
+                                    revert with 0, 17
+                                balanceOf[this.address] = balanceOf[this.address] + (cd[68] * totalFees / 100) + (cd[68] / 100)
+                                emit Transfer(((cd[68] * totalFees / 100) + (cd[68] / 100)), address(cd[4]), this.address);
+                                if not address(cd[4]):
+                                    revert with 0, 'ERC20: transfer from the zero address'
+                                if not address(cd[36]):
+                                    revert with 0, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(cd[4])] < cd[68] - (cd[68] * totalFees / 100) - (cd[68] / 100):
+                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(cd[4])] = balanceOf[address(cd[4])] - cd[68] + (cd[68] * totalFees / 100) + (cd[68] / 100)
+                                if balanceOf[address(cd[36])] > !(cd[68] - (cd[68] * totalFees / 100) - (cd[68] / 100)):
+                                    revert with 0, 17
+                                balanceOf[address(cd[36])] = balanceOf[address(cd[36])] + cd[68] - (cd[68] * totalFees / 100) - (cd[68] / 100)
+                                emit Transfer((cd[68] - (cd[68] * totalFees / 100) - (cd[68] / 100)), address(cd[4]), address(cd[36]));
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0xe30443bc with:
+                     gas gas_remaining wei
+                    args address(cd[4]), balanceOf[address(cd[4])]
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0xe30443bc with:
+                     gas gas_remaining wei
+                    args address(cd[36]), balanceOf[address(cd[36])]
+                if not stor7:
+                    require ext_code.size(dividendTrackerAddress)
+                    call dividendTrackerAddress.0xffb2c479 with:
+                         gas gas_remaining wei
+                        args gasForProcessing
+                    if ext_call.success:
+                        require return_data.size >= 96
+                        emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+            if allowance[address(cd[4])][msg.sender].field_0 < cd[68]:
+                revert with 0, 'ERC20: transfer amount exceeds allowance'
+            if not address(cd[4]):
+                revert with 0, 'ERC20: approve from the zero address'
+            if not msg.sender:
+                revert with 0, 'ERC20: approve to the zero address'
+            allowance[address(cd[4])][address(msg.sender)].field_0 = allowance[address(cd[4])][msg.sender].field_0 - cd[68]
+            emit Approval((allowance[address(cd[4])][msg.sender].field_0 - cd[68]), address(cd[4]), msg.sender);
+    else:
+        if unknown_0xb62496f5(?????) <= uint32(call.func_hash) >> 224:
+            if unknown_0xe708a0f9(?????) <= uint32(call.func_hash) >> 224:
+                if unknown_0xf27fd254(?????) > uint32(call.func_hash) >> 224:
+                    if unknown_0xe708a0f9(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        return tokenRewardsFee
+                    if unknown_0xe7841ec0(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require ext_code.size(dividendTrackerAddress)
+                        staticcall dividendTrackerAddress.0xe7841ec0 with:
+                                gas gas_remaining wei
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 32
+                        return ext_call.return_data[0]
+                    require unknown_0xe98030c7(?????) == uint32(call.func_hash) >> 224
+                    require not msg.value
+                    require calldata.size - 4 >= 32
+                    if owner != msg.sender:
+                        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                    require ext_code.size(dividendTrackerAddress)
+                    call dividendTrackerAddress.0xe98030c7 with:
+                         gas gas_remaining wei
+                        args cd[4]
+                    if not ext_call.success:
+                        revert with ext_call.return_data[0 len return_data.size]
+                else:
+                    if unknown_0xf27fd254(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require ext_code.size(dividendTrackerAddress)
+                        staticcall dividendTrackerAddress.0x5183d6fd with:
+                                gas gas_remaining wei
+                               args cd[4]
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 256
+                        require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                        return ext_call.return_data[12 len 20], 
+                               ext_call.return_data[32],
+                               ext_call.return_data[64],
+                               ext_call.return_data[96],
+                               ext_call.return_data[128],
+                               ext_call.return_data[160],
+                               ext_call.return_data[192],
+                               ext_call.return_data[224]
+                    if uint32(call.func_hash) >> 224 != unknown_0xf2fde38b(?????):
+                        if unknown_0xf7c618c1(?????) == uint32(call.func_hash) >> 224:
+                            require not msg.value
+                            return rewardTokenAddress
+                        require unknown_0xffa1ad74(?????) == uint32(call.func_hash) >> 224
+                        require not msg.value
+                        return 1
+                    require not msg.value
+                    require calldata.size - 4 >= 32
+                    require cd[4] == address(cd[4])
+                    if owner != msg.sender:
+                        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                    if not address(cd[4]):
+                        revert with 0, 'Ownable: new owner is the zero address'
+                    owner = address(cd[4])
+                    emit OwnershipTransferred(owner, address(cd[4]));
+            else:
+                if unknown_0xc492f046(?????) > uint32(call.func_hash) >> 224:
+                    if unknown_0xb62496f5(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require cd[4] == address(cd[4])
+                        return bool(stor18[cd[4]])
+                    if unknown_0xbdd4f29f(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        require ext_code.size(dividendTrackerAddress)
+                        staticcall dividendTrackerAddress.0xbe10b614 with:
+                                gas gas_remaining wei
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 32
+                        return ext_call.return_data[0]
+                    require unknown_0xc0246668(?????) == uint32(call.func_hash) >> 224
+                    require not msg.value
+                    require calldata.size - 4 >= 64
+                    require cd[4] == address(cd[4])
+                    require cd[36] == bool(cd[36])
+                    if owner != msg.sender:
+                        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                    if bool(cd[36]) == bool(stor17[address(cd[4])]):
+                        revert with 0, 'BABYTOKEN: Account is already the value of 'excluded''
+                    stor17[address(cd[4])] = uint8(bool(cd[36]))
+                    emit ExcludeFromFees(bool(cd[36]), address(cd[4]));
+                else:
+                    if uint32(call.func_hash) >> 224 != unknown_0xc492f046(?????):
+                        if uint32(call.func_hash) >> 224 != unknown_0xc705c569(?????):
+                            if uint32(call.func_hash) >> 224 != unknown_0xdd62ed3e(?????):
+                                require unknown_0xe2f45605(?????) == uint32(call.func_hash) >> 224
+                                require not msg.value
+                                return swapTokensAtAmount
+                            require not msg.value
+                            require calldata.size - 4 >= 64
+                            require cd[4] == address(cd[4])
+                            require cd[36] == address(cd[36])
+                            return allowance[address(cd[4])][address(cd[36])].field_0
+                        require not msg.value
+                        require calldata.size - 4 >= 32
+                        require cd[4] == address(cd[4])
+                        require ext_code.size(dividendTrackerAddress)
+                        staticcall dividendTrackerAddress.0xc705c569 with:
+                                gas gas_remaining wei
+                               args address(cd[4])
+                        if not ext_call.success:
+                            revert with ext_call.return_data[0 len return_data.size]
+                        require return_data.size >= 32
+                        require ext_call.return_data[0] == bool(ext_call.return_data[0])
+                        return bool(ext_call.return_data[0])
+                    require not msg.value
+                    require calldata.size - 4 >= 64
+                    require cd[4] <= test266151307()
+                    require cd[4] + 35 < calldata.size
+                    require ('cd', 4).length <= test266151307()
+                    require cd[4] + (32 * ('cd', 4).length) + 36 <= calldata.size
+                    require cd[36] == bool(cd[36])
+                    if owner != msg.sender:
+                        revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                    idx = 0
+                    while idx < ('cd', 4).length:
+                        require cd[((32 * idx) + cd[4] + 36)] == address(cd[((32 * idx) + cd[4] + 36)])
+                        mem[0] = address(cd[((32 * idx) + cd[4] + 36)])
+                        mem[32] = 17
+                        stor17[address(cd[((32 * idx) + cd[4] + 36)])] = uint8(bool(cd[36]))
+                        if idx == -1:
+                            revert with 0, 17
+                        idx = idx + 1
+                        continue 
+                    idx = 0
+                    s = 224
+                    t = cd[4] + 36
+                    while idx < ('cd', 4).length:
+                        require cd[t] == address(cd[t])
+                        mem[s] = address(cd[t])
+                        idx = idx + 1
+                        s = s + 32
+                        t = t + 32
+                        continue 
+                    emit ExcludeMultipleAccountsFromFees(Array(len=('cd', 4).length, data=mem[224 len 32 * ('cd', 4).length]), bool(cd[36]));
+        if unknown_0xa26579ad(?????) > uint32(call.func_hash) >> 224:
+            if unknown_0x98118cb4(?????) <= uint32(call.func_hash) >> 224:
+                if unknown_0x98118cb4(?????) == uint32(call.func_hash) >> 224:
+                    require not msg.value
+                    return liquidityFee
+                if uint32(call.func_hash) >> 224 != unknown_0x9a7a23d6(?????):
+                    require unknown_0x9c1b8af5(?????) == uint32(call.func_hash) >> 224
+                    require not msg.value
+                    return gasForProcessing
+                require not msg.value
+                require calldata.size - 4 >= 64
+                require cd[4] == address(cd[4])
+                require cd[36] == bool(cd[36])
+                if owner != msg.sender:
+                    revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                if uniswapV2PairAddress == address(cd[4]):
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                                'BABYTOKEN: The PancakeSwap pair cannot be removed from automatedMarketMakerPairs'
+                if bool(cd[36]) == bool(stor18[address(cd[4])]):
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 
+                                'BABYTOKEN: Automated market maker pair is already set to that value'
+                stor18[address(cd[4])] = uint8(bool(cd[36]))
+                if cd[36]:
+                    require ext_code.size(dividendTrackerAddress)
+                    call dividendTrackerAddress.0x31e79db0 with:
+                         gas gas_remaining wei
+                        args address(cd[4])
+                    if not ext_call.success:
+                        revert with ext_call.return_data[0 len return_data.size]
+                emit SetAutomatedMarketMakerPair(address(cd[4]), bool(cd[36]));
+            else:
+                if uint32(call.func_hash) >> 224 != unknown_0x88bdd9be(?????):
+                    if unknown_0x8da5cb5b(?????) == uint32(call.func_hash) >> 224:
+                        require not msg.value
+                        return owner
+                    require unknown_0x95d89b41(?????) == uint32(call.func_hash) >> 224
+                    require not msg.value
+                    if bool(stor4.length):
+                        if bool(stor4.length) == uint255(stor4.length) * 0.5 < 32:
+                            revert with 0, 34
+                        if bool(stor4.length):
+                            if bool(stor4.length) == uint255(stor4.length) * 0.5 < 32:
+                                revert with 0, 34
+                            if Mask(256, -1, stor4.length):
+                                if 31 < uint255(stor4.length) * 0.5:
+                                    mem[160] = uint256(stor4.field_0)
+                                    idx = 160
+                                    s = 0
+                                    while (uint255(stor4.length) * 0.5) + 128 > idx:
+                                        mem[idx + 32] = stor4[s].field_256
+                                        idx = idx + 32
+                                        s = s + 1
+                                        continue 
+                                    return Array(len=2 * Mask(256, -1, stor4.length), data=mem[160 len ceil32(uint255(stor4.length) * 0.5)])
+                                mem[160] = 256 * stor4.length.field_8
+                        else:
+                            if bool(stor4.length) == stor4.length.field_1 < 32:
+                                revert with 0, 34
+                            if stor4.length.field_1:
+                                if 31 < stor4.length.field_1:
+                                    mem[160] = uint256(stor4.field_0)
+                                    idx = 160
+                                    s = 0
+                                    while stor4.length.field_1 + 128 > idx:
+                                        mem[idx + 32] = stor4[s].field_256
+                                        idx = idx + 32
+                                        s = s + 1
+                                        continue 
+                                    return Array(len=2 * Mask(256, -1, stor4.length), data=mem[160 len ceil32(uint255(stor4.length) * 0.5)])
+                                mem[160] = 256 * stor4.length.field_8
+                        mem[ceil32(uint255(stor4.length) * 0.5) + 224 len ceil32(uint255(stor4.length) * 0.5)] = mem[160 len ceil32(uint255(stor4.length) * 0.5)]
+                        if ceil32(uint255(stor4.length) * 0.5) > uint255(stor4.length) * 0.5:
+                            mem[ceil32(uint255(stor4.length) * 0.5) + (uint255(stor4.length) * 0.5) + 224] = 0
+                        return Array(len=2 * Mask(256, -1, stor4.length), data=mem[160 len ceil32(uint255(stor4.length) * 0.5)], mem[(2 * ceil32(uint255(stor4.length) * 0.5)) + 224 len 2 * ceil32(uint255(stor4.length) * 0.5)]), 
+                    if bool(stor4.length) == stor4.length.field_1 < 32:
+                        revert with 0, 34
+                    if bool(stor4.length):
+                        if bool(stor4.length) == uint255(stor4.length) * 0.5 < 32:
+                            revert with 0, 34
+                        if Mask(256, -1, stor4.length):
+                            if 31 < uint255(stor4.length) * 0.5:
+                                mem[160] = uint256(stor4.field_0)
+                                idx = 160
+                                s = 0
+                                while (uint255(stor4.length) * 0.5) + 128 > idx:
+                                    mem[idx + 32] = stor4[s].field_256
+                                    idx = idx + 32
+                                    s = s + 1
+                                    continue 
+                                return Array(len=stor4.length % 128, data=mem[160 len ceil32(stor4.length.field_1)])
+                            mem[160] = 256 * stor4.length.field_8
+                    else:
+                        if bool(stor4.length) == stor4.length.field_1 < 32:
+                            revert with 0, 34
+                        if stor4.length.field_1:
+                            if 31 < stor4.length.field_1:
+                                mem[160] = uint256(stor4.field_0)
+                                idx = 160
+                                s = 0
+                                while stor4.length.field_1 + 128 > idx:
+                                    mem[idx + 32] = stor4[s].field_256
+                                    idx = idx + 32
+                                    s = s + 1
+                                    continue 
+                                return Array(len=stor4.length % 128, data=mem[160 len ceil32(stor4.length.field_1)])
+                            mem[160] = 256 * stor4.length.field_8
+                    mem[ceil32(stor4.length.field_1) + 224 len ceil32(stor4.length.field_1)] = mem[160 len ceil32(stor4.length.field_1)]
+                    if ceil32(stor4.length.field_1) > stor4.length.field_1:
+                        mem[ceil32(stor4.length.field_1) + stor4.length.field_1 + 224] = 0
+                    return Array(len=stor4.length % 128, data=mem[160 len ceil32(stor4.length.field_1)], mem[(2 * ceil32(stor4.length.field_1)) + 224 len 2 * ceil32(stor4.length.field_1)]), 
+                require not msg.value
+                require calldata.size - 4 >= 32
+                require cd[4] == address(cd[4])
+                if owner != msg.sender:
+                    revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                if dividendTrackerAddress == address(cd[4]):
+                    revert with 0, 'BABYTOKEN: The dividend tracker already has that address'
+                require ext_code.size(address(cd[4]))
+                staticcall address(cd[4]).0x8da5cb5b with:
+                        gas gas_remaining wei
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                require return_data.size >= 32
+                require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                if ext_call.return_data[12 len 20] != this.address:
+                    revert with 0, 'BABYTOKEN: The new dividend tracker must be owned by the BABYTOKEN token contract'
+                require ext_code.size(address(cd[4]))
+                call address(cd[4]).0x31e79db0 with:
+                     gas gas_remaining wei
+                    args address(cd[4])
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                require ext_code.size(address(cd[4]))
+                call address(cd[4]).0x31e79db0 with:
+                     gas gas_remaining wei
+                    args this.address
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                require ext_code.size(address(cd[4]))
+                call address(cd[4]).0x31e79db0 with:
+                     gas gas_remaining wei
+                    args owner
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                require ext_code.size(address(cd[4]))
+                call address(cd[4]).0x31e79db0 with:
+                     gas gas_remaining wei
+                    args uniswapV2RouterAddress
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                emit UpdateDividendTracker(address(cd[4]), dividendTrackerAddress);
+                dividendTrackerAddress = address(cd[4])
+        if unknown_0xa9059cbb(?????) > uint32(call.func_hash) >> 224:
+            if unknown_0xa26579ad(?????) == uint32(call.func_hash) >> 224:
+                require not msg.value
+                require ext_code.size(dividendTrackerAddress)
+                staticcall dividendTrackerAddress.0x6f2789ec with:
+                        gas gas_remaining wei
+            else:
+                if unknown_0xa457c2d7(?????) == uint32(call.func_hash) >> 224:
+                    require not msg.value
+                    require calldata.size - 4 >= 64
+                    require cd[4] == address(cd[4])
+                    if allowance[msg.sender][address(cd[4])].field_0 < cd[36]:
+                        revert with 0, 'ERC20: decreased allowance below zero'
+                    if not msg.sender:
+                        revert with 0, 'ERC20: approve from the zero address'
+                    if not address(cd[4]):
+                        revert with 0, 'ERC20: approve to the zero address'
+                    allowance[address(msg.sender)][address(cd[4])].field_0 = allowance[msg.sender][address(cd[4])].field_0 - cd[36]
+                    emit Approval((allowance[msg.sender][address(cd[4])].field_0 - cd[36]), msg.sender, address(cd[4]));
+                    return 1
+                require unknown_0xa8b9d240(?????) == uint32(call.func_hash) >> 224
+                require not msg.value
+                require calldata.size - 4 >= 32
+                require cd[4] == address(cd[4])
+                require ext_code.size(dividendTrackerAddress)
+                staticcall dividendTrackerAddress.0xa8b9d240 with:
+                        gas gas_remaining wei
+                       args address(cd[4])
+            if not ext_call.success:
+                revert with ext_call.return_data[0 len return_data.size]
+            require return_data.size >= 32
+            return ext_call.return_data[0]
+        if uint32(call.func_hash) >> 224 != unknown_0xa9059cbb(?????):
+            if unknown_0xad56c13c(?????) == uint32(call.func_hash) >> 224:
+                require not msg.value
+                require calldata.size - 4 >= 32
+                require cd[4] == address(cd[4])
+                require ext_code.size(dividendTrackerAddress)
+                staticcall dividendTrackerAddress.0xfbcbc0f1 with:
+                        gas gas_remaining wei
+                       args address(cd[4])
+                if not ext_call.success:
+                    revert with ext_call.return_data[0 len return_data.size]
+                require return_data.size >= 256
+                require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                return ext_call.return_data[12 len 20], 
+                       ext_call.return_data[32],
+                       ext_call.return_data[64],
+                       ext_call.return_data[96],
+                       ext_call.return_data[128],
+                       ext_call.return_data[160],
+                       ext_call.return_data[192],
+                       ext_call.return_data[224]
+            if uint32(call.func_hash) >> 224 != unknown_0xadefd90c(?????):
+                require unknown_0xafa4f3b2(?????) == uint32(call.func_hash) >> 224
+                require not msg.value
+                require calldata.size - 4 >= 32
+                if owner != msg.sender:
+                    revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                swapTokensAtAmount = cd[4]
+            else:
+                require not msg.value
+                require calldata.size - 4 >= 32
+                if owner != msg.sender:
+                    revert with 0, 32, 32, 0xfe4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65
+                liquidityFee = cd[4]
+                if tokenRewardsFee > !cd[4]:
+                    revert with 0, 17
+                if tokenRewardsFee + cd[4] > !marketingFee:
+                    revert with 0, 17
+                totalFees = tokenRewardsFee + cd[4] + marketingFee
+                if 25 < tokenRewardsFee + cd[4] + marketingFee:
+                    revert with 0, 'Total fee is over 25%'
+        require not msg.value
+        require calldata.size - 4 >= 64
+        require cd[4] == address(cd[4])
+        if not msg.sender:
+            revert with 0, 'ERC20: transfer from the zero address'
+        if not address(cd[4]):
+            revert with 0, 'ERC20: transfer to the zero address'
+        if not cd[36]:
+            if not msg.sender:
+                revert with 0, 'ERC20: transfer from the zero address'
+            if not address(cd[4]):
+                revert with 0, 'ERC20: transfer to the zero address'
+            if balanceOf[address(msg.sender)] < 0:
+                revert with 0, 'ERC20: transfer amount exceeds balance'
+            if balanceOf[address(cd[4])] > -1:
+                revert with 0, 17
+            emit Transfer(0, msg.sender, address(cd[4]));
+        else:
+            if balanceOf[this.address] >= swapTokensAtAmount:
+                if not stor7:
+                    if not stor18[address(msg.sender)]:
+                        if owner != msg.sender:
+                            if owner != address(cd[4]):
+                                stor7 = 1
+                                if balanceOf[this.address] and marketingFee > -1 / balanceOf[this.address]:
+                                    revert with 0, 17
+                                if not totalFees:
+                                    revert with 0, 18
+                                mem[132] = this.address
+                                require ext_code.size(rewardTokenAddress)
+                                staticcall rewardTokenAddress.0x70a08231 with:
+                                        gas gas_remaining wei
+                                       args this.address
+                                mem[128] = ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                mem[ceil32(return_data.size) + 128] = 3
+                                mem[ceil32(return_data.size) + 160] = this.address
+                                require ext_code.size(uniswapV2RouterAddress)
+                                staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                        gas gas_remaining wei
+                                mem[ceil32(return_data.size) + 256] = ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                                mem[ceil32(return_data.size) + 192] = ext_call.return_data[12 len 20]
+                                mem[ceil32(return_data.size) + 224] = rewardTokenAddress
+                                if not this.address:
+                                    mem[(2 * ceil32(return_data.size)) + 256] = 0x8c379a000000000000000000000000000000000000000000000000000000000
+                                    mem[(2 * ceil32(return_data.size)) + 260] = 32
+                                    mem[(2 * ceil32(return_data.size)) + 292] = 36
+                                    mem[(2 * ceil32(return_data.size)) + 324] = 'ERC20: approve from the zero add'
+                                    mem[(2 * ceil32(return_data.size)) + 356] = 'ress'
+                                    revert with memory
+                                      from (2 * ceil32(return_data.size)) + 256
+                                       len ceil32(return_data.size) + 132
+                                if not uniswapV2RouterAddress:
+                                    mem[(2 * ceil32(return_data.size)) + 256] = 0x8c379a000000000000000000000000000000000000000000000000000000000
+                                    mem[(2 * ceil32(return_data.size)) + 260] = 32
+                                    mem[(2 * ceil32(return_data.size)) + 292] = 34
+                                    mem[(2 * ceil32(return_data.size)) + 324] = 'ERC20: approve to the zero addre'
+                                    mem[(2 * ceil32(return_data.size)) + 356] = 'ss'
+                                    revert with memory
+                                      from (2 * ceil32(return_data.size)) + 256
+                                       len ceil32(return_data.size) + 132
+                                allowance[address(this.address)][stor6].field_0 = balanceOf[this.address] * marketingFee / totalFees
+                                mem[(2 * ceil32(return_data.size)) + 256] = balanceOf[this.address] * marketingFee / totalFees
+                                emit Approval(mem[(2 * ceil32(return_data.size)) + 256 len ceil32(return_data.size) + 32], this.address, uniswapV2RouterAddress);
+                                mem[(2 * ceil32(return_data.size)) + 256] = 0x5c11d79500000000000000000000000000000000000000000000000000000000
+                                mem[(2 * ceil32(return_data.size)) + 260] = balanceOf[this.address] * marketingFee / totalFees
+                                mem[(2 * ceil32(return_data.size)) + 292] = 0
+                                mem[(2 * ceil32(return_data.size)) + 324] = 160
+                                mem[(2 * ceil32(return_data.size)) + 420] = 3
+                                idx = 0
+                                s = (2 * ceil32(return_data.size)) + 452
+                                t = ceil32(return_data.size) + 160
+                                while idx < mem[ceil32(return_data.size) + 128]:
+                                    mem[s] = mem[t + 12 len 20]
+                                    idx = idx + 1
+                                    s = s + 32
+                                    t = t + 32
+                                    continue 
+                                mem[(2 * ceil32(return_data.size)) + 356] = this.address
+                                mem[(2 * ceil32(return_data.size)) + 388] = block.timestamp
+                                require ext_code.size(uniswapV2RouterAddress)
+                                call uniswapV2RouterAddress.swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256 arg1, uint256 arg2, address[] arg3, address arg4, uint256 arg5) with:
+                                     gas gas_remaining wei
+                                    args balanceOf[this.address] * marketingFee / totalFees, 0, 160, address(this.address), block.timestamp, mem[(2 * ceil32(return_data.size)) + 420 len (32 * mem[ceil32(return_data.size) + 128]) + 32]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                mem[(2 * ceil32(return_data.size)) + 260] = this.address
+                                require ext_code.size(rewardTokenAddress)
+                                staticcall rewardTokenAddress.0x70a08231 with:
+                                        gas gas_remaining wei
+                                       args this.address
+                                mem[(2 * ceil32(return_data.size)) + 256] = ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                if ext_call.return_data[0] < ext_call.return_data[0]:
+                                    revert with 0, 17
+                                mem[(4 * ceil32(return_data.size)) + 260] = _marketingWalletAddress
+                                mem[(4 * ceil32(return_data.size)) + 292] = 0
+                                require ext_code.size(rewardTokenAddress)
+                                call rewardTokenAddress.0xa9059cbb with:
+                                     gas gas_remaining wei
+                                    args _marketingWalletAddress, 0
+                                mem[(4 * ceil32(return_data.size)) + 256] = ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                require ext_call.return_data[0] == bool(ext_call.return_data[0])
+                                if balanceOf[this.address] and liquidityFee > -1 / balanceOf[this.address]:
+                                    revert with 0, 17
+                                if not totalFees:
+                                    revert with 0, 18
+                                if balanceOf[this.address] * liquidityFee / totalFees < balanceOf[this.address] * liquidityFee / totalFees / 2:
+                                    revert with 0, 17
+                                mem[(6 * ceil32(return_data.size)) + 256] = 2
+                                mem[(6 * ceil32(return_data.size)) + 288] = this.address
+                                require ext_code.size(uniswapV2RouterAddress)
+                                staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                        gas gas_remaining wei
+                                mem[(6 * ceil32(return_data.size)) + 352] = ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                                mem[(6 * ceil32(return_data.size)) + 320] = ext_call.return_data[12 len 20]
+                                if not this.address:
+                                    revert with 0, 'ERC20: approve from the zero address'
+                                if not uniswapV2RouterAddress:
+                                    revert with 0, 'ERC20: approve to the zero address'
+                                allowance[address(this.address)][stor6].field_0 = balanceOf[this.address] * liquidityFee / totalFees / 2
+                                allowance[address(this.address)][stor6].field_255 = 0
+                                emit Approval((balanceOf[this.address] * liquidityFee / totalFees / 2), this.address, uniswapV2RouterAddress);
+                                mem[(7 * ceil32(return_data.size)) + 352] = 0x791ac94700000000000000000000000000000000000000000000000000000000
+                                mem[(7 * ceil32(return_data.size)) + 356] = balanceOf[this.address] * liquidityFee / totalFees / 2
+                                idx = 0
+                                s = (7 * ceil32(return_data.size)) + 548
+                                t = (6 * ceil32(return_data.size)) + 288
+                                while idx < 2:
+                                    mem[s] = mem[t + 12 len 20]
+                                    idx = idx + 1
+                                    s = s + 32
+                                    t = t + 32
+                                    continue 
+                                require ext_code.size(uniswapV2RouterAddress)
+                                call uniswapV2RouterAddress.swapExactTokensForETHSupportingFeeOnTransferTokens(uint256 arg1, uint256 arg2, address[] arg3, address arg4, uint256 arg5) with:
+                                     gas gas_remaining wei
+                                    args Mask(255, 1, balanceOf[this.address] * liquidityFee / totalFees), 0, 160, address(this.address), block.timestamp, 2, mem[(7 * ceil32(return_data.size)) + 548 len 64]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                if eth.balance(this.address) < eth.balance(this.address):
+                                    revert with 0, 17
+                                if not this.address:
+                                    revert with 0, 'ERC20: approve from the zero address'
+                                if not uniswapV2RouterAddress:
+                                    revert with 0, 'ERC20: approve to the zero address'
+                                allowance[address(this.address)][stor6].field_0 = (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)
+                                emit Approval(((balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)), this.address, uniswapV2RouterAddress);
+                                mem[(7 * ceil32(return_data.size)) + 356] = this.address
+                                mem[(7 * ceil32(return_data.size)) + 388] = (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)
+                                mem[(7 * ceil32(return_data.size)) + 420] = 0
+                                mem[(7 * ceil32(return_data.size)) + 452] = 0
+                                mem[(7 * ceil32(return_data.size)) + 484] = 0
+                                mem[(7 * ceil32(return_data.size)) + 516] = block.timestamp
+                                require ext_code.size(uniswapV2RouterAddress)
+                                call uniswapV2RouterAddress.addLiquidityETH(address arg1, uint256 arg2, uint256 arg3, uint256 arg4, address arg5, uint256 arg6) with:
+                                     gas gas_remaining wei
+                                    args this.address, (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2), 0, 0, 0, block.timestamp
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 96
+                                emit SwapAndLiquify(Mask(255, 1, balanceOf[this.address] * liquidityFee / totalFees), 0, (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2));
+                                mem[(8 * ceil32(return_data.size)) + 352] = 3
+                                mem[(8 * ceil32(return_data.size)) + 384] = this.address
+                                require ext_code.size(uniswapV2RouterAddress)
+                                staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                        gas gas_remaining wei
+                                mem[(8 * ceil32(return_data.size)) + 480] = ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                mem[64] = (10 * ceil32(return_data.size)) + 480
+                                require return_data.size >= 32
+                                require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                                mem[(8 * ceil32(return_data.size)) + 416] = ext_call.return_data[12 len 20]
+                                mem[(8 * ceil32(return_data.size)) + 448] = rewardTokenAddress
+                                if not this.address:
+                                    revert with 0, 'ERC20: approve from the zero address'
+                                if not uniswapV2RouterAddress:
+                                    revert with 0, 'ERC20: approve to the zero address'
+                                mem[0] = uniswapV2RouterAddress
+                                mem[32] = sha3(address(this.address), 1)
+                                allowance[address(this.address)][stor6].field_0 = balanceOf[this.address]
+                                emit Approval(balanceOf[this.address], this.address, uniswapV2RouterAddress);
+                                mem[(10 * ceil32(return_data.size)) + 480] = 0x5c11d79500000000000000000000000000000000000000000000000000000000
+                                mem[(10 * ceil32(return_data.size)) + 484] = balanceOf[this.address]
+                                mem[(10 * ceil32(return_data.size)) + 516] = 0
+                                mem[(10 * ceil32(return_data.size)) + 548] = 160
+                                mem[(10 * ceil32(return_data.size)) + 644] = 3
+                                idx = 0
+                                s = (10 * ceil32(return_data.size)) + 676
+                                t = (8 * ceil32(return_data.size)) + 384
+                                while idx < mem[(8 * ceil32(return_data.size)) + 352]:
+                                    mem[s] = mem[t + 12 len 20]
+                                    idx = idx + 1
+                                    s = s + 32
+                                    t = t + 32
+                                    continue 
+                                require ext_code.size(uniswapV2RouterAddress)
+                                call uniswapV2RouterAddress.swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256 arg1, uint256 arg2, address[] arg3, address arg4, uint256 arg5) with:
+                                     gas gas_remaining wei
+                                    args balanceOf[this.address], 0, 160, address(this.address), block.timestamp, mem[(10 * ceil32(return_data.size)) + 644 len (32 * mem[(8 * ceil32(return_data.size)) + 352]) + 32]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require ext_code.size(rewardTokenAddress)
+                                staticcall rewardTokenAddress.0x70a08231 with:
+                                        gas gas_remaining wei
+                                       args this.address
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                require ext_code.size(rewardTokenAddress)
+                                call rewardTokenAddress.0xa9059cbb with:
+                                     gas gas_remaining wei
+                                    args dividendTrackerAddress, ext_call.return_data[0]
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                require return_data.size >= 32
+                                require ext_call.return_data[0] == bool(ext_call.return_data[0])
+                                if ext_call.return_data[0]:
+                                    require ext_code.size(dividendTrackerAddress)
+                                    call dividendTrackerAddress.0xba72a955 with:
+                                         gas gas_remaining wei
+                                        args ext_call.return_data[0]
+                                    if not ext_call.success:
+                                        revert with ext_call.return_data[0 len return_data.size]
+                                    emit SendDividends(balanceOf[this.address], ext_call.return_data[0]);
+                                stor7 = 0
+            if stor17[address(msg.sender)]:
+                if not msg.sender:
+                    revert with 0, 'ERC20: transfer from the zero address'
+                if not address(cd[4]):
+                    revert with 0, 'ERC20: transfer to the zero address'
+                if balanceOf[address(msg.sender)] < cd[36]:
+                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                balanceOf[address(msg.sender)] -= cd[36]
+                if balanceOf[address(cd[4])] > !cd[36]:
+                    revert with 0, 17
+                balanceOf[address(cd[4])] += cd[36]
+                emit Transfer(cd[36], msg.sender, address(cd[4]));
+            else:
+                if stor17[address(cd[4])]:
+                    if not msg.sender:
+                        revert with 0, 'ERC20: transfer from the zero address'
+                    if not address(cd[4]):
+                        revert with 0, 'ERC20: transfer to the zero address'
+                    if balanceOf[address(msg.sender)] < cd[36]:
+                        revert with 0, 'ERC20: transfer amount exceeds balance'
+                    balanceOf[address(msg.sender)] -= cd[36]
+                    if balanceOf[address(cd[4])] > !cd[36]:
+                        revert with 0, 17
+                    balanceOf[address(cd[4])] += cd[36]
+                    emit Transfer(cd[36], msg.sender, address(cd[4]));
+                else:
+                    if stor7:
+                        if not msg.sender:
+                            revert with 0, 'ERC20: transfer from the zero address'
+                        if not address(cd[4]):
+                            revert with 0, 'ERC20: transfer to the zero address'
+                        if balanceOf[address(msg.sender)] < cd[36]:
+                            revert with 0, 'ERC20: transfer amount exceeds balance'
+                        balanceOf[address(msg.sender)] -= cd[36]
+                        if balanceOf[address(cd[4])] > !cd[36]:
+                            revert with 0, 17
+                        balanceOf[address(cd[4])] += cd[36]
+                        emit Transfer(cd[36], msg.sender, address(cd[4]));
+                    else:
+                        if cd[36] and totalFees > -1 / cd[36]:
+                            revert with 0, 17
+                        if not stor18[address(cd[4])]:
+                            if cd[36] < cd[36] * totalFees / 100:
+                                revert with 0, 17
+                            if not msg.sender:
+                                revert with 0, 'ERC20: transfer from the zero address'
+                            if not this.address:
+                                revert with 0, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(msg.sender)] < cd[36] * totalFees / 100:
+                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(msg.sender)] -= cd[36] * totalFees / 100
+                            if balanceOf[this.address] > !(cd[36] * totalFees / 100):
+                                revert with 0, 17
+                            balanceOf[this.address] += cd[36] * totalFees / 100
+                            emit Transfer((cd[36] * totalFees / 100), msg.sender, this.address);
+                            if not msg.sender:
+                                revert with 0, 'ERC20: transfer from the zero address'
+                            if not address(cd[4]):
+                                revert with 0, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(msg.sender)] < cd[36] - (cd[36] * totalFees / 100):
+                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(msg.sender)] = balanceOf[address(msg.sender)] - cd[36] + (cd[36] * totalFees / 100)
+                            if balanceOf[address(cd[4])] > !(cd[36] - (cd[36] * totalFees / 100)):
+                                revert with 0, 17
+                            balanceOf[address(cd[4])] = balanceOf[address(cd[4])] + cd[36] - (cd[36] * totalFees / 100)
+                            emit Transfer((cd[36] - (cd[36] * totalFees / 100)), msg.sender, address(cd[4]));
+                        else:
+                            if cd[36] and 1 > -1 / cd[36]:
+                                revert with 0, 17
+                            if cd[36] * totalFees / 100 > !(cd[36] / 100):
+                                revert with 0, 17
+                            if cd[36] < (cd[36] * totalFees / 100) + (cd[36] / 100):
+                                revert with 0, 17
+                            if not msg.sender:
+                                revert with 0, 'ERC20: transfer from the zero address'
+                            if not this.address:
+                                revert with 0, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(msg.sender)] < (cd[36] * totalFees / 100) + (cd[36] / 100):
+                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(msg.sender)] = balanceOf[address(msg.sender)] - (cd[36] * totalFees / 100) - (cd[36] / 100)
+                            if balanceOf[this.address] > !((cd[36] * totalFees / 100) + (cd[36] / 100)):
+                                revert with 0, 17
+                            balanceOf[this.address] = balanceOf[this.address] + (cd[36] * totalFees / 100) + (cd[36] / 100)
+                            emit Transfer(((cd[36] * totalFees / 100) + (cd[36] / 100)), msg.sender, this.address);
+                            if not msg.sender:
+                                revert with 0, 'ERC20: transfer from the zero address'
+                            if not address(cd[4]):
+                                revert with 0, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(msg.sender)] < cd[36] - (cd[36] * totalFees / 100) - (cd[36] / 100):
+                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(msg.sender)] = balanceOf[address(msg.sender)] - cd[36] + (cd[36] * totalFees / 100) + (cd[36] / 100)
+                            if balanceOf[address(cd[4])] > !(cd[36] - (cd[36] * totalFees / 100) - (cd[36] / 100)):
+                                revert with 0, 17
+                            balanceOf[address(cd[4])] = balanceOf[address(cd[4])] + cd[36] - (cd[36] * totalFees / 100) - (cd[36] / 100)
+                            emit Transfer((cd[36] - (cd[36] * totalFees / 100) - (cd[36] / 100)), msg.sender, address(cd[4]));
+            require ext_code.size(dividendTrackerAddress)
+            call dividendTrackerAddress.0xe30443bc with:
+                 gas gas_remaining wei
+                args msg.sender, balanceOf[address(msg.sender)]
+            require ext_code.size(dividendTrackerAddress)
+            call dividendTrackerAddress.0xe30443bc with:
+                 gas gas_remaining wei
+                args address(cd[4]), balanceOf[address(cd[4])]
+            if not stor7:
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0xffb2c479 with:
+                     gas gas_remaining wei
+                    args gasForProcessing
+                if ext_call.success:
+                    require return_data.size >= 96
+                    emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+    return 1
+}
+
+function transferFrom(address arg1, address arg2, uint256 arg3) {
+    require calldata.size - 4 >= 96
+    require arg1 == arg1
+    require arg2 == arg2
+    if not arg1:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+    if not arg2:
+        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+    if not arg3:
+        if not arg1:
+            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+        if not arg2:
+            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+        if balanceOf[address(arg1)] < 0:
+            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+        if balanceOf[arg2] > -1:
+            revert with 0, 17
+        emit Transfer(0, arg1, arg2);
+        if allowance[address(arg1)][msg.sender].field_0 < arg3:
+            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+        if not arg1:
+            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+        if not msg.sender:
+            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+    else:
+        if balanceOf[this.address] < swapTokensAtAmount:
+            if stor17[address(arg1)]:
+                if not arg1:
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                if not arg2:
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                if balanceOf[address(arg1)] < arg3:
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                balanceOf[address(arg1)] -= arg3
+                if balanceOf[arg2] > !arg3:
+                    revert with 0, 17
+                balanceOf[arg2] += arg3
+                emit Transfer(arg3, arg1, arg2);
+            else:
+                if stor17[address(arg2)]:
+                    if not arg1:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                    if not arg2:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                    if balanceOf[address(arg1)] < arg3:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                    balanceOf[address(arg1)] -= arg3
+                    if balanceOf[arg2] > !arg3:
+                        revert with 0, 17
+                    balanceOf[arg2] += arg3
+                    emit Transfer(arg3, arg1, arg2);
+                else:
+                    if stor7:
+                        if not arg1:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                        if not arg2:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                        if balanceOf[address(arg1)] < arg3:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                        balanceOf[address(arg1)] -= arg3
+                        if balanceOf[arg2] > !arg3:
+                            revert with 0, 17
+                        balanceOf[arg2] += arg3
+                        emit Transfer(arg3, arg1, arg2);
+                    else:
+                        if arg3 and totalFees > -1 / arg3:
+                            revert with 0, 17
+                        if not stor18[address(arg2)]:
+                            if arg3 < arg3 * totalFees / 100:
+                                revert with 0, 17
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not this.address:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                            if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                revert with 0, 17
+                            balanceOf[this.address] += arg3 * totalFees / 100
+                            emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not arg2:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                            if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                revert with 0, 17
+                            balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                            emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                        else:
+                            if arg3 and 1 > -1 / arg3:
+                                revert with 0, 17
+                            if arg3 * totalFees / 100 > !(arg3 / 100):
+                                revert with 0, 17
+                            if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                revert with 0, 17
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not this.address:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                            if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                revert with 0, 17
+                            balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                            emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not arg2:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                            if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                revert with 0, 17
+                            balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                            emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+            require ext_code.size(dividendTrackerAddress)
+            call dividendTrackerAddress.0xe30443bc with:
+                 gas gas_remaining wei
+                args address(arg1), balanceOf[address(arg1)]
+            require ext_code.size(dividendTrackerAddress)
+            call dividendTrackerAddress.0xe30443bc with:
+                 gas gas_remaining wei
+                args address(arg2), balanceOf[address(arg2)]
+            if stor7:
+                if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                if not arg1:
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                if not msg.sender:
+                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+            else:
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0xffb2c479 with:
+                     gas gas_remaining wei
+                    args gasForProcessing
+                if not ext_call.success:
+                    if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                    if not arg1:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                    if not msg.sender:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                else:
+                    require return_data.size >= 96
+                    emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+                    if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                        revert with 0, 'ERC20: transfer amount exceeds allowance'
+                    if not arg1:
+                        revert with 0, 'ERC20: approve from the zero address'
+                    if not msg.sender:
+                        revert with 0, 'ERC20: approve to the zero address'
+        else:
+            if stor7:
+                if stor17[address(arg1)]:
+                    if not arg1:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                    if not arg2:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                    if balanceOf[address(arg1)] < arg3:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                    balanceOf[address(arg1)] -= arg3
+                    if balanceOf[arg2] > !arg3:
+                        revert with 0, 17
+                    balanceOf[arg2] += arg3
+                    emit Transfer(arg3, arg1, arg2);
+                else:
+                    if stor17[address(arg2)]:
+                        if not arg1:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                        if not arg2:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                        if balanceOf[address(arg1)] < arg3:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                        balanceOf[address(arg1)] -= arg3
+                        if balanceOf[arg2] > !arg3:
+                            revert with 0, 17
+                        balanceOf[arg2] += arg3
+                        emit Transfer(arg3, arg1, arg2);
+                    else:
+                        if stor7:
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not arg2:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < arg3:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] -= arg3
+                            if balanceOf[arg2] > !arg3:
+                                revert with 0, 17
+                            balanceOf[arg2] += arg3
+                            emit Transfer(arg3, arg1, arg2);
+                        else:
+                            if arg3 and totalFees > -1 / arg3:
+                                revert with 0, 17
+                            if not stor18[address(arg2)]:
+                                if arg3 < arg3 * totalFees / 100:
+                                    revert with 0, 17
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not this.address:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                                if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                    revert with 0, 17
+                                balanceOf[this.address] += arg3 * totalFees / 100
+                                emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not arg2:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                                if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                    revert with 0, 17
+                                balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                                emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                            else:
+                                if arg3 and 1 > -1 / arg3:
+                                    revert with 0, 17
+                                if arg3 * totalFees / 100 > !(arg3 / 100):
+                                    revert with 0, 17
+                                if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                    revert with 0, 17
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not this.address:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                                if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                    revert with 0, 17
+                                balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                                emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not arg2:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                                if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                    revert with 0, 17
+                                balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                                emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0xe30443bc with:
+                     gas gas_remaining wei
+                    args address(arg1), balanceOf[address(arg1)]
+                require ext_code.size(dividendTrackerAddress)
+                call dividendTrackerAddress.0xe30443bc with:
+                     gas gas_remaining wei
+                    args address(arg2), balanceOf[address(arg2)]
+                if stor7:
+                    if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                    if not arg1:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                    if not msg.sender:
+                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                else:
+                    require ext_code.size(dividendTrackerAddress)
+                    call dividendTrackerAddress.0xffb2c479 with:
+                         gas gas_remaining wei
+                        args gasForProcessing
+                    if not ext_call.success:
+                        if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                        if not arg1:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                        if not msg.sender:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                    else:
+                        require return_data.size >= 96
+                        emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+                        if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                            revert with 0, 'ERC20: transfer amount exceeds allowance'
+                        if not arg1:
+                            revert with 0, 'ERC20: approve from the zero address'
+                        if not msg.sender:
+                            revert with 0, 'ERC20: approve to the zero address'
+            else:
+                if stor18[address(arg1)]:
+                    if stor17[address(arg1)]:
+                        if not arg1:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                        if not arg2:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                        if balanceOf[address(arg1)] < arg3:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                        balanceOf[address(arg1)] -= arg3
+                        if balanceOf[arg2] > !arg3:
+                            revert with 0, 17
+                        balanceOf[arg2] += arg3
+                        emit Transfer(arg3, arg1, arg2);
+                    else:
+                        if stor17[address(arg2)]:
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not arg2:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < arg3:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] -= arg3
+                            if balanceOf[arg2] > !arg3:
+                                revert with 0, 17
+                            balanceOf[arg2] += arg3
+                            emit Transfer(arg3, arg1, arg2);
+                        else:
+                            if stor7:
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not arg2:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < arg3:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] -= arg3
+                                if balanceOf[arg2] > !arg3:
+                                    revert with 0, 17
+                                balanceOf[arg2] += arg3
+                                emit Transfer(arg3, arg1, arg2);
+                            else:
+                                if arg3 and totalFees > -1 / arg3:
+                                    revert with 0, 17
+                                if not stor18[address(arg2)]:
+                                    if arg3 < arg3 * totalFees / 100:
+                                        revert with 0, 17
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                    if not this.address:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                                    if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                        revert with 0, 17
+                                    balanceOf[this.address] += arg3 * totalFees / 100
+                                    emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                    if not arg2:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                                    if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                        revert with 0, 17
+                                    balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                                    emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                                else:
+                                    if arg3 and 1 > -1 / arg3:
+                                        revert with 0, 17
+                                    if arg3 * totalFees / 100 > !(arg3 / 100):
+                                        revert with 0, 17
+                                    if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                        revert with 0, 17
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                    if not this.address:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                                    if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                        revert with 0, 17
+                                    balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                                    emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                    if not arg2:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                                    if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                        revert with 0, 17
+                                    balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                                    emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+                    require ext_code.size(dividendTrackerAddress)
+                    call dividendTrackerAddress.0xe30443bc with:
+                         gas gas_remaining wei
+                        args address(arg1), balanceOf[address(arg1)]
+                    require ext_code.size(dividendTrackerAddress)
+                    call dividendTrackerAddress.0xe30443bc with:
+                         gas gas_remaining wei
+                        args address(arg2), balanceOf[address(arg2)]
+                    if stor7:
+                        if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                        if not arg1:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                        if not msg.sender:
+                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                    else:
+                        require ext_code.size(dividendTrackerAddress)
+                        call dividendTrackerAddress.0xffb2c479 with:
+                             gas gas_remaining wei
+                            args gasForProcessing
+                        if not ext_call.success:
+                            if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                            if not msg.sender:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                        else:
+                            require return_data.size >= 96
+                            emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+                            if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                revert with 0, 'ERC20: transfer amount exceeds allowance'
+                            if not arg1:
+                                revert with 0, 'ERC20: approve from the zero address'
+                            if not msg.sender:
+                                revert with 0, 'ERC20: approve to the zero address'
+                else:
+                    if owner == arg1:
+                        if stor17[address(arg1)]:
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                            if not arg2:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                            if balanceOf[address(arg1)] < arg3:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                            balanceOf[address(arg1)] -= arg3
+                            if balanceOf[arg2] > !arg3:
+                                revert with 0, 17
+                            balanceOf[arg2] += arg3
+                            emit Transfer(arg3, arg1, arg2);
+                        else:
+                            if stor17[address(arg2)]:
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not arg2:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < arg3:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] -= arg3
+                                if balanceOf[arg2] > !arg3:
+                                    revert with 0, 17
+                                balanceOf[arg2] += arg3
+                                emit Transfer(arg3, arg1, arg2);
+                            else:
+                                if stor7:
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                    if not arg2:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] -= arg3
+                                    if balanceOf[arg2] > !arg3:
+                                        revert with 0, 17
+                                    balanceOf[arg2] += arg3
+                                    emit Transfer(arg3, arg1, arg2);
+                                else:
+                                    if arg3 and totalFees > -1 / arg3:
+                                        revert with 0, 17
+                                    if not stor18[address(arg2)]:
+                                        if arg3 < arg3 * totalFees / 100:
+                                            revert with 0, 17
+                                        if not arg1:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                        if not this.address:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                                        if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                            revert with 0, 17
+                                        balanceOf[this.address] += arg3 * totalFees / 100
+                                        emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                                        if not arg1:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                        if not arg2:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                                        if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                            revert with 0, 17
+                                        balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                                        emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                                    else:
+                                        if arg3 and 1 > -1 / arg3:
+                                            revert with 0, 17
+                                        if arg3 * totalFees / 100 > !(arg3 / 100):
+                                            revert with 0, 17
+                                        if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                            revert with 0, 17
+                                        if not arg1:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                        if not this.address:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                                        if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                            revert with 0, 17
+                                        balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                                        emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                                        if not arg1:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                        if not arg2:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                                        if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                            revert with 0, 17
+                                        balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                                        emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+                        require ext_code.size(dividendTrackerAddress)
+                        call dividendTrackerAddress.0xe30443bc with:
+                             gas gas_remaining wei
+                            args address(arg1), balanceOf[address(arg1)]
+                        require ext_code.size(dividendTrackerAddress)
+                        call dividendTrackerAddress.0xe30443bc with:
+                             gas gas_remaining wei
+                            args address(arg2), balanceOf[address(arg2)]
+                        if stor7:
+                            if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                            if not arg1:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                            if not msg.sender:
+                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                        else:
+                            require ext_code.size(dividendTrackerAddress)
+                            call dividendTrackerAddress.0xffb2c479 with:
+                                 gas gas_remaining wei
+                                args gasForProcessing
+                            if not ext_call.success:
+                                if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                                if not msg.sender:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                            else:
+                                require return_data.size >= 96
+                                emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+                                if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                    revert with 0, 'ERC20: transfer amount exceeds allowance'
+                                if not arg1:
+                                    revert with 0, 'ERC20: approve from the zero address'
+                                if not msg.sender:
+                                    revert with 0, 'ERC20: approve to the zero address'
+                    else:
+                        if owner == arg2:
+                            if stor17[address(arg1)]:
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                if not arg2:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                if balanceOf[address(arg1)] < arg3:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                balanceOf[address(arg1)] -= arg3
+                                if balanceOf[arg2] > !arg3:
+                                    revert with 0, 17
+                                balanceOf[arg2] += arg3
+                                emit Transfer(arg3, arg1, arg2);
+                            else:
+                                if stor17[address(arg2)]:
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                    if not arg2:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] -= arg3
+                                    if balanceOf[arg2] > !arg3:
+                                        revert with 0, 17
+                                    balanceOf[arg2] += arg3
+                                    emit Transfer(arg3, arg1, arg2);
+                                else:
+                                    if stor7:
+                                        if not arg1:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                        if not arg2:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < arg3:
+                                            revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] -= arg3
+                                        if balanceOf[arg2] > !arg3:
+                                            revert with 0, 17
+                                        balanceOf[arg2] += arg3
+                                        emit Transfer(arg3, arg1, arg2);
+                                    else:
+                                        if arg3 and totalFees > -1 / arg3:
+                                            revert with 0, 17
+                                        if not stor18[address(arg2)]:
+                                            if arg3 < arg3 * totalFees / 100:
+                                                revert with 0, 17
+                                            if not arg1:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                            if not this.address:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                            if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                            balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                                            if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                                revert with 0, 17
+                                            balanceOf[this.address] += arg3 * totalFees / 100
+                                            emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                                            if not arg1:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                            if not arg2:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                            if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                            balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                                            if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                                revert with 0, 17
+                                            balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                                            emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                                        else:
+                                            if arg3 and 1 > -1 / arg3:
+                                                revert with 0, 17
+                                            if arg3 * totalFees / 100 > !(arg3 / 100):
+                                                revert with 0, 17
+                                            if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                                revert with 0, 17
+                                            if not arg1:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                            if not this.address:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                            if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                            balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                                            if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                                revert with 0, 17
+                                            balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                                            emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                                            if not arg1:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer from the zero address'
+                                            if not arg2:
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer to the zero address'
+                                            if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                                revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds balance'
+                                            balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                                            if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                                revert with 0, 17
+                                            balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                                            emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+                            require ext_code.size(dividendTrackerAddress)
+                            call dividendTrackerAddress.0xe30443bc with:
+                                 gas gas_remaining wei
+                                args address(arg1), balanceOf[address(arg1)]
+                            require ext_code.size(dividendTrackerAddress)
+                            call dividendTrackerAddress.0xe30443bc with:
+                                 gas gas_remaining wei
+                                args address(arg2), balanceOf[address(arg2)]
+                            if stor7:
+                                if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                                if not arg1:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                                if not msg.sender:
+                                    revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                            else:
+                                require ext_code.size(dividendTrackerAddress)
+                                call dividendTrackerAddress.0xffb2c479 with:
+                                     gas gas_remaining wei
+                                    args gasForProcessing
+                                if not ext_call.success:
+                                    if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: transfer amount exceeds allowance'
+                                    if not arg1:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve from the zero address'
+                                    if not msg.sender:
+                                        revert with 0x8c379a000000000000000000000000000000000000000000000000000000000, 'ERC20: approve to the zero address'
+                                else:
+                                    require return_data.size >= 96
+                                    emit ProcessedDividendTracker(ext_call.return_data[0], ext_call.return_data[32], ext_call.return_data[64], gasForProcessing, 1, tx.origin);
+                                    if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                        revert with 0, 'ERC20: transfer amount exceeds allowance'
+                                    if not arg1:
+                                        revert with 0, 'ERC20: approve from the zero address'
+                                    if not msg.sender:
+                                        revert with 0, 'ERC20: approve to the zero address'
+                        else:
+                            stor7 = 1
+                            if balanceOf[this.address] and marketingFee > -1 / balanceOf[this.address]:
+                                revert with 0, 17
+                            if not totalFees:
+                                revert with 0, 18
+                            mem[100] = this.address
+                            require ext_code.size(rewardTokenAddress)
+                            staticcall rewardTokenAddress.0x70a08231 with:
+                                    gas gas_remaining wei
+                                   args this.address
+                            mem[96] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            require return_data.size >= 32
+                            mem[ceil32(return_data.size) + 96] = 3
+                            mem[ceil32(return_data.size) + 128] = this.address
+                            require ext_code.size(uniswapV2RouterAddress)
+                            staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                    gas gas_remaining wei
+                            mem[ceil32(return_data.size) + 224] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            mem[64] = (2 * ceil32(return_data.size)) + 224
+                            require return_data.size >= 32
+                            require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                            mem[ceil32(return_data.size) + 160] = ext_call.return_data[12 len 20]
+                            mem[ceil32(return_data.size) + 192] = rewardTokenAddress
+                            if not this.address:
+                                mem[(2 * ceil32(return_data.size)) + 224] = 0x8c379a000000000000000000000000000000000000000000000000000000000
+                                mem[(2 * ceil32(return_data.size)) + 228] = 32
+                                mem[(2 * ceil32(return_data.size)) + 260] = 36
+                                mem[(2 * ceil32(return_data.size)) + 292] = 'ERC20: approve from the zero add'
+                                mem[(2 * ceil32(return_data.size)) + 324] = 'ress'
+                                revert with memory
+                                  from (2 * ceil32(return_data.size)) + 224
+                                   len ceil32(return_data.size) + 132
+                            if not uniswapV2RouterAddress:
+                                mem[(2 * ceil32(return_data.size)) + 224] = 0x8c379a000000000000000000000000000000000000000000000000000000000
+                                mem[(2 * ceil32(return_data.size)) + 228] = 32
+                                mem[(2 * ceil32(return_data.size)) + 260] = 34
+                                mem[(2 * ceil32(return_data.size)) + 292] = 'ERC20: approve to the zero addre'
+                                mem[(2 * ceil32(return_data.size)) + 324] = 'ss'
+                                revert with memory
+                                  from (2 * ceil32(return_data.size)) + 224
+                                   len ceil32(return_data.size) + 132
+                            mem[0] = uniswapV2RouterAddress
+                            mem[32] = sha3(address(this.address), 1)
+                            allowance[address(this.address)][stor6].field_0 = balanceOf[this.address] * marketingFee / totalFees
+                            mem[(2 * ceil32(return_data.size)) + 224] = balanceOf[this.address] * marketingFee / totalFees
+                            emit Approval(mem[(2 * ceil32(return_data.size)) + 224 len ceil32(return_data.size) + 32], this.address, uniswapV2RouterAddress);
+                            mem[(2 * ceil32(return_data.size)) + 224] = 0x5c11d79500000000000000000000000000000000000000000000000000000000
+                            mem[(2 * ceil32(return_data.size)) + 228] = balanceOf[this.address] * marketingFee / totalFees
+                            mem[(2 * ceil32(return_data.size)) + 260] = 0
+                            mem[(2 * ceil32(return_data.size)) + 292] = 160
+                            mem[(2 * ceil32(return_data.size)) + 388] = 3
+                            idx = 0
+                            s = (2 * ceil32(return_data.size)) + 420
+                            t = ceil32(return_data.size) + 128
+                            while idx < mem[ceil32(return_data.size) + 96]:
+                                mem[s] = mem[t + 12 len 20]
+                                idx = idx + 1
+                                s = s + 32
+                                t = t + 32
+                                continue 
+                            mem[(2 * ceil32(return_data.size)) + 324] = this.address
+                            mem[(2 * ceil32(return_data.size)) + 356] = block.timestamp
+                            require ext_code.size(uniswapV2RouterAddress)
+                            call uniswapV2RouterAddress.mem[mem[64] len 4] with:
+                                 gas gas_remaining wei
+                                args mem[mem[64] + 4 len (2 * ceil32(return_data.size)) + -mem[64] + 512]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            mem[mem[64] + 4] = this.address
+                            require ext_code.size(rewardTokenAddress)
+                            staticcall rewardTokenAddress.0x70a08231 with:
+                                    gas gas_remaining wei
+                                   args this.address
+                            mem[mem[64]] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            _5858 = mem[64]
+                            mem[64] = mem[64] + ceil32(return_data.size)
+                            require return_data.size >= 32
+                            _5859 = mem[_5858]
+                            if mem[_5858] < ext_call.return_data[0]:
+                                revert with 0, 17
+                            mem[mem[64] + 4] = _marketingWalletAddress
+                            mem[mem[64] + 36] = _5859 - ext_call.return_data[0]
+                            require ext_code.size(rewardTokenAddress)
+                            call rewardTokenAddress.0xa9059cbb with:
+                                 gas gas_remaining wei
+                                args _marketingWalletAddress, _5859 - ext_call.return_data[0]
+                            mem[mem[64]] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            _5862 = mem[64]
+                            mem[64] = mem[64] + ceil32(return_data.size)
+                            require return_data.size >= 32
+                            require mem[_5862] == bool(mem[_5862])
+                            if balanceOf[this.address] and liquidityFee > -1 / balanceOf[this.address]:
+                                revert with 0, 17
+                            if not totalFees:
+                                revert with 0, 18
+                            if balanceOf[this.address] * liquidityFee / totalFees < balanceOf[this.address] * liquidityFee / totalFees / 2:
+                                revert with 0, 17
+                            _5864 = mem[64]
+                            mem[mem[64]] = 2
+                            mem[64] = mem[64] + 96
+                            mem[_5864 + 32 len 64] = call.data[calldata.size len 64]
+                            if 0 >= mem[_5864]:
+                                revert with 0, 50
+                            mem[_5864 + 32] = this.address
+                            require ext_code.size(uniswapV2RouterAddress)
+                            staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                    gas gas_remaining wei
+                            mem[_5864 + 96] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            mem[64] = _5864 + ceil32(return_data.size) + 96
+                            require return_data.size >= 32
+                            require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                            if 1 >= mem[_5864]:
+                                revert with 0, 50
+                            mem[_5864 + 64] = ext_call.return_data[12 len 20]
+                            if not this.address:
+                                revert with 0, 'ERC20: approve from the zero address'
+                            if not uniswapV2RouterAddress:
+                                revert with 0, 'ERC20: approve to the zero address'
+                            mem[0] = uniswapV2RouterAddress
+                            mem[32] = sha3(address(this.address), 1)
+                            allowance[address(this.address)][stor6].field_0 = balanceOf[this.address] * liquidityFee / totalFees / 2
+                            allowance[address(this.address)][stor6].field_255 = 0
+                            emit Approval((balanceOf[this.address] * liquidityFee / totalFees / 2), this.address, uniswapV2RouterAddress);
+                            mem[_5864 + ceil32(return_data.size) + 96] = 0x791ac94700000000000000000000000000000000000000000000000000000000
+                            mem[_5864 + ceil32(return_data.size) + 100] = balanceOf[this.address] * liquidityFee / totalFees / 2
+                            mem[_5864 + ceil32(return_data.size) + 132] = 0
+                            mem[_5864 + ceil32(return_data.size) + 164] = 160
+                            mem[_5864 + ceil32(return_data.size) + 260] = mem[_5864]
+                            idx = 0
+                            s = _5864 + ceil32(return_data.size) + 292
+                            t = _5864 + 32
+                            while idx < mem[_5864]:
+                                mem[s] = mem[t + 12 len 20]
+                                idx = idx + 1
+                                s = s + 32
+                                t = t + 32
+                                continue 
+                            mem[_5864 + ceil32(return_data.size) + 196] = this.address
+                            mem[_5864 + ceil32(return_data.size) + 228] = block.timestamp
+                            require ext_code.size(uniswapV2RouterAddress)
+                            call uniswapV2RouterAddress.mem[mem[64] len 4] with:
+                                 gas gas_remaining wei
+                                args mem[mem[64] + 4 len _5864 + ceil32(return_data.size) + (32 * mem[_5864]) + -mem[64] + 288]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            if eth.balance(this.address) < eth.balance(this.address):
+                                revert with 0, 17
+                            if not this.address:
+                                revert with 0, 'ERC20: approve from the zero address'
+                            if not uniswapV2RouterAddress:
+                                revert with 0, 'ERC20: approve to the zero address'
+                            mem[0] = uniswapV2RouterAddress
+                            mem[32] = sha3(address(this.address), 1)
+                            allowance[address(this.address)][stor6].field_0 = (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)
+                            emit Approval(((balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)), this.address, uniswapV2RouterAddress);
+                            mem[mem[64] + 68] = 0
+                            mem[mem[64] + 100] = 0
+                            mem[mem[64] + 132] = 0
+                            mem[mem[64] + 164] = block.timestamp
+                            require ext_code.size(uniswapV2RouterAddress)
+                            call uniswapV2RouterAddress.addLiquidityETH(address arg1, uint256 arg2, uint256 arg3, uint256 arg4, address arg5, uint256 arg6) with:
+                                 gas gas_remaining wei
+                                args this.address, (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2), 0, 0, 0, block.timestamp
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            mem[64] = mem[64] + ceil32(return_data.size)
+                            require return_data.size >= 96
+                            mem[mem[64] + 32] = 0
+                            mem[mem[64] + 64] = (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2)
+                            emit SwapAndLiquify(Mask(255, 1, balanceOf[this.address] * liquidityFee / totalFees), 0, (balanceOf[this.address] * liquidityFee / totalFees) - (balanceOf[this.address] * liquidityFee / totalFees / 2));
+                            mem[0] = this.address
+                            mem[32] = 0
+                            _8132 = mem[64]
+                            mem[mem[64]] = 3
+                            mem[64] = mem[64] + 128
+                            mem[_8132 + 32 len 96] = call.data[calldata.size len 96]
+                            if 0 >= mem[_8132]:
+                                revert with 0, 50
+                            mem[_8132 + 32] = this.address
+                            require ext_code.size(uniswapV2RouterAddress)
+                            staticcall uniswapV2RouterAddress.0xad5c4648 with:
+                                    gas gas_remaining wei
+                            mem[_8132 + 128] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            mem[64] = _8132 + ceil32(return_data.size) + 128
+                            require return_data.size >= 32
+                            require ext_call.return_data[0] == ext_call.return_data[12 len 20]
+                            if 1 >= mem[_8132]:
+                                revert with 0, 50
+                            mem[_8132 + 64] = ext_call.return_data[12 len 20]
+                            if 2 >= mem[_8132]:
+                                revert with 0, 50
+                            mem[_8132 + 96] = rewardTokenAddress
+                            if not this.address:
+                                revert with 0, 'ERC20: approve from the zero address'
+                            if not uniswapV2RouterAddress:
+                                revert with 0, 'ERC20: approve to the zero address'
+                            mem[0] = uniswapV2RouterAddress
+                            mem[32] = sha3(address(this.address), 1)
+                            allowance[address(this.address)][stor6].field_0 = balanceOf[this.address]
+                            emit Approval(balanceOf[this.address], this.address, uniswapV2RouterAddress);
+                            mem[_8132 + ceil32(return_data.size) + 128] = 0x5c11d79500000000000000000000000000000000000000000000000000000000
+                            mem[_8132 + ceil32(return_data.size) + 132] = balanceOf[this.address]
+                            mem[_8132 + ceil32(return_data.size) + 164] = 0
+                            mem[_8132 + ceil32(return_data.size) + 196] = 160
+                            mem[_8132 + ceil32(return_data.size) + 292] = mem[_8132]
+                            idx = 0
+                            s = _8132 + ceil32(return_data.size) + 324
+                            t = _8132 + 32
+                            while idx < mem[_8132]:
+                                mem[s] = mem[t + 12 len 20]
+                                idx = idx + 1
+                                s = s + 32
+                                t = t + 32
+                                continue 
+                            mem[_8132 + ceil32(return_data.size) + 228] = this.address
+                            mem[_8132 + ceil32(return_data.size) + 260] = block.timestamp
+                            require ext_code.size(uniswapV2RouterAddress)
+                            call uniswapV2RouterAddress.mem[mem[64] len 4] with:
+                                 gas gas_remaining wei
+                                args mem[mem[64] + 4 len _8132 + ceil32(return_data.size) + (32 * mem[_8132]) + -mem[64] + 320]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            mem[mem[64] + 4] = this.address
+                            require ext_code.size(rewardTokenAddress)
+                            staticcall rewardTokenAddress.0x70a08231 with:
+                                    gas gas_remaining wei
+                                   args this.address
+                            mem[mem[64]] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            _10418 = mem[64]
+                            mem[64] = mem[64] + ceil32(return_data.size)
+                            require return_data.size >= 32
+                            _10419 = mem[_10418]
+                            mem[mem[64] + 4] = dividendTrackerAddress
+                            mem[mem[64] + 36] = _10419
+                            require ext_code.size(rewardTokenAddress)
+                            call rewardTokenAddress.0xa9059cbb with:
+                                 gas gas_remaining wei
+                                args dividendTrackerAddress, _10419
+                            mem[mem[64]] = ext_call.return_data[0]
+                            if not ext_call.success:
+                                revert with ext_call.return_data[0 len return_data.size]
+                            _10422 = mem[64]
+                            mem[64] = mem[64] + ceil32(return_data.size)
+                            require return_data.size >= 32
+                            require mem[_10422] == bool(mem[_10422])
+                            if not mem[_10422]:
+                                stor7 = 0
+                                if stor17[address(arg1)]:
+                                    if not arg1:
+                                        revert with 0, 'ERC20: transfer from the zero address'
+                                    if not arg2:
+                                        revert with 0, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3:
+                                        revert with 0, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] -= arg3
+                                    if balanceOf[arg2] > !arg3:
+                                        revert with 0, 17
+                                    balanceOf[arg2] += arg3
+                                    emit Transfer(arg3, arg1, arg2);
+                                    require ext_code.size(dividendTrackerAddress)
+                                    call dividendTrackerAddress.0xe30443bc with:
+                                         gas gas_remaining wei
+                                        args address(arg1), balanceOf[address(arg1)]
+                                    mem[0] = arg2
+                                    mem[32] = 0
+                                    require ext_code.size(dividendTrackerAddress)
+                                    call dividendTrackerAddress.0xe30443bc with:
+                                         gas gas_remaining wei
+                                        args address(arg2), balanceOf[address(arg2)]
+                                    if not ext_call.success:
+                                        if not ext_call.success:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10571 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10626 = mem[_10571 + 32]
+                                                    _10627 = mem[_10571 + 64]
+                                                    mem[mem[64]] = mem[_10571]
+                                                    mem[mem[64] + 64] = _10627
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10626, _10627, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10597 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10673 = mem[_10597 + 32]
+                                                    _10674 = mem[_10597 + 64]
+                                                    mem[mem[64]] = mem[_10597]
+                                                    mem[mem[64] + 64] = _10674
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10673, _10674, gasForProcessing, 1, tx.origin);
+                                    else:
+                                        if not ext_call.success:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10599 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10677 = mem[_10599 + 32]
+                                                    _10678 = mem[_10599 + 64]
+                                                    mem[mem[64]] = mem[_10599]
+                                                    mem[mem[64] + 64] = _10678
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10677, _10678, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10631 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10744 = mem[_10631 + 32]
+                                                    _10745 = mem[_10631 + 64]
+                                                    mem[mem[64]] = mem[_10631]
+                                                    mem[mem[64] + 64] = _10745
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10744, _10745, gasForProcessing, 1, tx.origin);
+                                else:
+                                    if stor17[address(arg2)]:
+                                        if not arg1:
+                                            revert with 0, 'ERC20: transfer from the zero address'
+                                        if not arg2:
+                                            revert with 0, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < arg3:
+                                            revert with 0, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] -= arg3
+                                        if balanceOf[arg2] > !arg3:
+                                            revert with 0, 17
+                                        balanceOf[arg2] += arg3
+                                        emit Transfer(arg3, arg1, arg2);
+                                        require ext_code.size(dividendTrackerAddress)
+                                        call dividendTrackerAddress.0xe30443bc with:
+                                             gas gas_remaining wei
+                                            args address(arg1), balanceOf[address(arg1)]
+                                        mem[0] = arg2
+                                        mem[32] = 0
+                                        require ext_code.size(dividendTrackerAddress)
+                                        call dividendTrackerAddress.0xe30443bc with:
+                                             gas gas_remaining wei
+                                            args address(arg2), balanceOf[address(arg2)]
+                                        if not ext_call.success:
+                                            if not ext_call.success:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10613 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _10698 = mem[_10613 + 32]
+                                                        _10699 = mem[_10613 + 64]
+                                                        mem[mem[64]] = mem[_10613]
+                                                        mem[mem[64] + 64] = _10699
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _10698, _10699, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10646 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _10773 = mem[_10646 + 32]
+                                                        _10774 = mem[_10646 + 64]
+                                                        mem[mem[64]] = mem[_10646]
+                                                        mem[mem[64] + 64] = _10774
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _10773, _10774, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if not ext_call.success:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10648 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _10777 = mem[_10648 + 32]
+                                                        _10778 = mem[_10648 + 64]
+                                                        mem[mem[64]] = mem[_10648]
+                                                        mem[mem[64] + 64] = _10778
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _10777, _10778, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10703 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _10855 = mem[_10703 + 32]
+                                                        _10856 = mem[_10703 + 64]
+                                                        mem[mem[64]] = mem[_10703]
+                                                        mem[mem[64] + 64] = _10856
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _10855, _10856, gasForProcessing, 1, tx.origin);
+                                    else:
+                                        if stor7:
+                                            if not arg1:
+                                                revert with 0, 'ERC20: transfer from the zero address'
+                                            if not arg2:
+                                                revert with 0, 'ERC20: transfer to the zero address'
+                                            if balanceOf[address(arg1)] < arg3:
+                                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                                            balanceOf[address(arg1)] -= arg3
+                                            if balanceOf[arg2] > !arg3:
+                                                revert with 0, 17
+                                            balanceOf[arg2] += arg3
+                                            emit Transfer(arg3, arg1, arg2);
+                                            require ext_code.size(dividendTrackerAddress)
+                                            call dividendTrackerAddress.0xe30443bc with:
+                                                 gas gas_remaining wei
+                                                args address(arg1), balanceOf[address(arg1)]
+                                            mem[0] = arg2
+                                            mem[32] = 0
+                                            require ext_code.size(dividendTrackerAddress)
+                                            call dividendTrackerAddress.0xe30443bc with:
+                                                 gas gas_remaining wei
+                                                args address(arg2), balanceOf[address(arg2)]
+                                            if not ext_call.success:
+                                                if not ext_call.success:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10579 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10634 = mem[_10579 + 32]
+                                                            _10635 = mem[_10579 + 64]
+                                                            mem[mem[64]] = mem[_10579]
+                                                            mem[mem[64] + 64] = _10635
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10634, _10635, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10604 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10688 = mem[_10604 + 32]
+                                                            _10689 = mem[_10604 + 64]
+                                                            mem[mem[64]] = mem[_10604]
+                                                            mem[mem[64] + 64] = _10689
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10688, _10689, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if not ext_call.success:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10606 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10692 = mem[_10606 + 32]
+                                                            _10693 = mem[_10606 + 64]
+                                                            mem[mem[64]] = mem[_10606]
+                                                            mem[mem[64] + 64] = _10693
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10692, _10693, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10639 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10763 = mem[_10639 + 32]
+                                                            _10764 = mem[_10639 + 64]
+                                                            mem[mem[64]] = mem[_10639]
+                                                            mem[mem[64] + 64] = _10764
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10763, _10764, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if arg3 and totalFees > -1 / arg3:
+                                                revert with 0, 17
+                                            if not stor18[address(arg2)]:
+                                                if arg3 < arg3 * totalFees / 100:
+                                                    revert with 0, 17
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not this.address:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                                                if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                                    revert with 0, 17
+                                                balanceOf[this.address] += arg3 * totalFees / 100
+                                                emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not arg2:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                                                if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                                    revert with 0, 17
+                                                balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                                                emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg1), balanceOf[address(arg1)]
+                                                mem[0] = arg2
+                                                mem[32] = 0
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg2), balanceOf[address(arg2)]
+                                                if not ext_call.success:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11851 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11875 = mem[_11851 + 32]
+                                                                _11876 = mem[_11851 + 64]
+                                                                mem[mem[64]] = mem[_11851]
+                                                                mem[mem[64] + 64] = _11876
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11875, _11876, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11864 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11898 = mem[_11864 + 32]
+                                                                _11899 = mem[_11864 + 64]
+                                                                mem[mem[64]] = mem[_11864]
+                                                                mem[mem[64] + 64] = _11899
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11898, _11899, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11866 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11902 = mem[_11866 + 32]
+                                                                _11903 = mem[_11866 + 64]
+                                                                mem[mem[64]] = mem[_11866]
+                                                                mem[mem[64] + 64] = _11903
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11902, _11903, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11880 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11935 = mem[_11880 + 32]
+                                                                _11936 = mem[_11880 + 64]
+                                                                mem[mem[64]] = mem[_11880]
+                                                                mem[mem[64] + 64] = _11936
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11935, _11936, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if arg3 and 1 > -1 / arg3:
+                                                    revert with 0, 17
+                                                if arg3 * totalFees / 100 > !(arg3 / 100):
+                                                    revert with 0, 17
+                                                if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                                    revert with 0, 17
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not this.address:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                                                if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                                    revert with 0, 17
+                                                balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                                                emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not arg2:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                                                if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                                    revert with 0, 17
+                                                balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                                                emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg1), balanceOf[address(arg1)]
+                                                mem[0] = arg2
+                                                mem[32] = 0
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg2), balanceOf[address(arg2)]
+                                                if not ext_call.success:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12227 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12272 = mem[_12227 + 32]
+                                                                _12273 = mem[_12227 + 64]
+                                                                mem[mem[64]] = mem[_12227]
+                                                                mem[mem[64] + 64] = _12273
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12272, _12273, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12248 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12308 = mem[_12248 + 32]
+                                                                _12309 = mem[_12248 + 64]
+                                                                mem[mem[64]] = mem[_12248]
+                                                                mem[mem[64] + 64] = _12309
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12308, _12309, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12250 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12312 = mem[_12250 + 32]
+                                                                _12313 = mem[_12250 + 64]
+                                                                mem[mem[64]] = mem[_12250]
+                                                                mem[mem[64] + 64] = _12313
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12312, _12313, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12277 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12349 = mem[_12277 + 32]
+                                                                _12350 = mem[_12277 + 64]
+                                                                mem[mem[64]] = mem[_12277]
+                                                                mem[mem[64] + 64] = _12350
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12349, _12350, gasForProcessing, 1, tx.origin);
+                            else:
+                                require ext_code.size(dividendTrackerAddress)
+                                call dividendTrackerAddress.0xba72a955 with:
+                                     gas gas_remaining wei
+                                    args _10419
+                                if not ext_call.success:
+                                    revert with ext_call.return_data[0 len return_data.size]
+                                emit SendDividends(balanceOf[this.address], _10419);
+                                stor7 = 0
+                                if stor17[address(arg1)]:
+                                    if not arg1:
+                                        revert with 0, 'ERC20: transfer from the zero address'
+                                    if not arg2:
+                                        revert with 0, 'ERC20: transfer to the zero address'
+                                    if balanceOf[address(arg1)] < arg3:
+                                        revert with 0, 'ERC20: transfer amount exceeds balance'
+                                    balanceOf[address(arg1)] -= arg3
+                                    if balanceOf[arg2] > !arg3:
+                                        revert with 0, 17
+                                    balanceOf[arg2] += arg3
+                                    emit Transfer(arg3, arg1, arg2);
+                                    require ext_code.size(dividendTrackerAddress)
+                                    call dividendTrackerAddress.0xe30443bc with:
+                                         gas gas_remaining wei
+                                        args address(arg1), balanceOf[address(arg1)]
+                                    mem[0] = arg2
+                                    mem[32] = 0
+                                    require ext_code.size(dividendTrackerAddress)
+                                    call dividendTrackerAddress.0xe30443bc with:
+                                         gas gas_remaining wei
+                                        args address(arg2), balanceOf[address(arg2)]
+                                    if not ext_call.success:
+                                        if not ext_call.success:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10705 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10859 = mem[_10705 + 32]
+                                                    _10860 = mem[_10705 + 64]
+                                                    mem[mem[64]] = mem[_10705]
+                                                    mem[mem[64] + 64] = _10860
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10859, _10860, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10782 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10935 = mem[_10782 + 32]
+                                                    _10936 = mem[_10782 + 64]
+                                                    mem[mem[64]] = mem[_10782]
+                                                    mem[mem[64] + 64] = _10936
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10935, _10936, gasForProcessing, 1, tx.origin);
+                                    else:
+                                        if not ext_call.success:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10784 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _10939 = mem[_10784 + 32]
+                                                    _10940 = mem[_10784 + 64]
+                                                    mem[mem[64]] = mem[_10784]
+                                                    mem[mem[64] + 64] = _10940
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _10939, _10940, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if not stor7:
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xffb2c479 with:
+                                                     gas gas_remaining wei
+                                                    args gasForProcessing
+                                                mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                if ext_call.success:
+                                                    _10864 = mem[64]
+                                                    mem[64] = mem[64] + ceil32(return_data.size)
+                                                    require return_data.size >= 96
+                                                    _11014 = mem[_10864 + 32]
+                                                    _11015 = mem[_10864 + 64]
+                                                    mem[mem[64]] = mem[_10864]
+                                                    mem[mem[64] + 64] = _11015
+                                                    mem[mem[64] + 96] = gasForProcessing
+                                                    emit ProcessedDividendTracker(mem[mem[64]], _11014, _11015, gasForProcessing, 1, tx.origin);
+                                else:
+                                    if stor17[address(arg2)]:
+                                        if not arg1:
+                                            revert with 0, 'ERC20: transfer from the zero address'
+                                        if not arg2:
+                                            revert with 0, 'ERC20: transfer to the zero address'
+                                        if balanceOf[address(arg1)] < arg3:
+                                            revert with 0, 'ERC20: transfer amount exceeds balance'
+                                        balanceOf[address(arg1)] -= arg3
+                                        if balanceOf[arg2] > !arg3:
+                                            revert with 0, 17
+                                        balanceOf[arg2] += arg3
+                                        emit Transfer(arg3, arg1, arg2);
+                                        require ext_code.size(dividendTrackerAddress)
+                                        call dividendTrackerAddress.0xe30443bc with:
+                                             gas gas_remaining wei
+                                            args address(arg1), balanceOf[address(arg1)]
+                                        mem[0] = arg2
+                                        mem[32] = 0
+                                        require ext_code.size(dividendTrackerAddress)
+                                        call dividendTrackerAddress.0xe30443bc with:
+                                             gas gas_remaining wei
+                                            args address(arg2), balanceOf[address(arg2)]
+                                        if not ext_call.success:
+                                            if not ext_call.success:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10798 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _10960 = mem[_10798 + 32]
+                                                        _10961 = mem[_10798 + 64]
+                                                        mem[mem[64]] = mem[_10798]
+                                                        mem[mem[64] + 64] = _10961
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _10960, _10961, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10879 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _11043 = mem[_10879 + 32]
+                                                        _11044 = mem[_10879 + 64]
+                                                        mem[mem[64]] = mem[_10879]
+                                                        mem[mem[64] + 64] = _11044
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _11043, _11044, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if not ext_call.success:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10881 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _11047 = mem[_10881 + 32]
+                                                        _11048 = mem[_10881 + 64]
+                                                        mem[mem[64]] = mem[_10881]
+                                                        mem[mem[64] + 64] = _11048
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _11047, _11048, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if not stor7:
+                                                    require ext_code.size(dividendTrackerAddress)
+                                                    call dividendTrackerAddress.0xffb2c479 with:
+                                                         gas gas_remaining wei
+                                                        args gasForProcessing
+                                                    mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                    if ext_call.success:
+                                                        _10965 = mem[64]
+                                                        mem[64] = mem[64] + ceil32(return_data.size)
+                                                        require return_data.size >= 96
+                                                        _11133 = mem[_10965 + 32]
+                                                        _11134 = mem[_10965 + 64]
+                                                        mem[mem[64]] = mem[_10965]
+                                                        mem[mem[64] + 64] = _11134
+                                                        mem[mem[64] + 96] = gasForProcessing
+                                                        emit ProcessedDividendTracker(mem[mem[64]], _11133, _11134, gasForProcessing, 1, tx.origin);
+                                    else:
+                                        if stor7:
+                                            if not arg1:
+                                                revert with 0, 'ERC20: transfer from the zero address'
+                                            if not arg2:
+                                                revert with 0, 'ERC20: transfer to the zero address'
+                                            if balanceOf[address(arg1)] < arg3:
+                                                revert with 0, 'ERC20: transfer amount exceeds balance'
+                                            balanceOf[address(arg1)] -= arg3
+                                            if balanceOf[arg2] > !arg3:
+                                                revert with 0, 17
+                                            balanceOf[arg2] += arg3
+                                            emit Transfer(arg3, arg1, arg2);
+                                            require ext_code.size(dividendTrackerAddress)
+                                            call dividendTrackerAddress.0xe30443bc with:
+                                                 gas gas_remaining wei
+                                                args address(arg1), balanceOf[address(arg1)]
+                                            mem[0] = arg2
+                                            mem[32] = 0
+                                            require ext_code.size(dividendTrackerAddress)
+                                            call dividendTrackerAddress.0xe30443bc with:
+                                                 gas gas_remaining wei
+                                                args address(arg2), balanceOf[address(arg2)]
+                                            if not ext_call.success:
+                                                if not ext_call.success:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10713 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10867 = mem[_10713 + 32]
+                                                            _10868 = mem[_10713 + 64]
+                                                            mem[mem[64]] = mem[_10713]
+                                                            mem[mem[64] + 64] = _10868
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10867, _10868, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10789 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10950 = mem[_10789 + 32]
+                                                            _10951 = mem[_10789 + 64]
+                                                            mem[mem[64]] = mem[_10789]
+                                                            mem[mem[64] + 64] = _10951
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10950, _10951, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if not ext_call.success:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10791 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _10954 = mem[_10791 + 32]
+                                                            _10955 = mem[_10791 + 64]
+                                                            mem[mem[64]] = mem[_10791]
+                                                            mem[mem[64] + 64] = _10955
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _10954, _10955, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not stor7:
+                                                        require ext_code.size(dividendTrackerAddress)
+                                                        call dividendTrackerAddress.0xffb2c479 with:
+                                                             gas gas_remaining wei
+                                                            args gasForProcessing
+                                                        mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                        if ext_call.success:
+                                                            _10872 = mem[64]
+                                                            mem[64] = mem[64] + ceil32(return_data.size)
+                                                            require return_data.size >= 96
+                                                            _11033 = mem[_10872 + 32]
+                                                            _11034 = mem[_10872 + 64]
+                                                            mem[mem[64]] = mem[_10872]
+                                                            mem[mem[64] + 64] = _11034
+                                                            mem[mem[64] + 96] = gasForProcessing
+                                                            emit ProcessedDividendTracker(mem[mem[64]], _11033, _11034, gasForProcessing, 1, tx.origin);
+                                        else:
+                                            if arg3 and totalFees > -1 / arg3:
+                                                revert with 0, 17
+                                            if not stor18[address(arg2)]:
+                                                if arg3 < arg3 * totalFees / 100:
+                                                    revert with 0, 17
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not this.address:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < arg3 * totalFees / 100:
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] -= arg3 * totalFees / 100
+                                                if balanceOf[this.address] > !(arg3 * totalFees / 100):
+                                                    revert with 0, 17
+                                                balanceOf[this.address] += arg3 * totalFees / 100
+                                                emit Transfer((arg3 * totalFees / 100), arg1, this.address);
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not arg2:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100):
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100)
+                                                if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100)):
+                                                    revert with 0, 17
+                                                balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100)
+                                                emit Transfer((arg3 - (arg3 * totalFees / 100)), arg1, arg2);
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg1), balanceOf[address(arg1)]
+                                                mem[0] = arg2
+                                                mem[32] = 0
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg2), balanceOf[address(arg2)]
+                                                if not ext_call.success:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11907 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11965 = mem[_11907 + 32]
+                                                                _11966 = mem[_11907 + 64]
+                                                                mem[mem[64]] = mem[_11907]
+                                                                mem[mem[64] + 64] = _11966
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11965, _11966, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11940 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11994 = mem[_11940 + 32]
+                                                                _11995 = mem[_11940 + 64]
+                                                                mem[mem[64]] = mem[_11940]
+                                                                mem[mem[64] + 64] = _11995
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11994, _11995, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11942 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _11998 = mem[_11942 + 32]
+                                                                _11999 = mem[_11942 + 64]
+                                                                mem[mem[64]] = mem[_11942]
+                                                                mem[mem[64] + 64] = _11999
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _11998, _11999, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _11970 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12028 = mem[_11970 + 32]
+                                                                _12029 = mem[_11970 + 64]
+                                                                mem[mem[64]] = mem[_11970]
+                                                                mem[mem[64] + 64] = _12029
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12028, _12029, gasForProcessing, 1, tx.origin);
+                                            else:
+                                                if arg3 and 1 > -1 / arg3:
+                                                    revert with 0, 17
+                                                if arg3 * totalFees / 100 > !(arg3 / 100):
+                                                    revert with 0, 17
+                                                if arg3 < (arg3 * totalFees / 100) + (arg3 / 100):
+                                                    revert with 0, 17
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not this.address:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < (arg3 * totalFees / 100) + (arg3 / 100):
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - (arg3 * totalFees / 100) - (arg3 / 100)
+                                                if balanceOf[this.address] > !((arg3 * totalFees / 100) + (arg3 / 100)):
+                                                    revert with 0, 17
+                                                balanceOf[this.address] = balanceOf[this.address] + (arg3 * totalFees / 100) + (arg3 / 100)
+                                                emit Transfer(((arg3 * totalFees / 100) + (arg3 / 100)), arg1, this.address);
+                                                if not arg1:
+                                                    revert with 0, 'ERC20: transfer from the zero address'
+                                                if not arg2:
+                                                    revert with 0, 'ERC20: transfer to the zero address'
+                                                if balanceOf[address(arg1)] < arg3 - (arg3 * totalFees / 100) - (arg3 / 100):
+                                                    revert with 0, 'ERC20: transfer amount exceeds balance'
+                                                balanceOf[address(arg1)] = balanceOf[address(arg1)] - arg3 + (arg3 * totalFees / 100) + (arg3 / 100)
+                                                if balanceOf[arg2] > !(arg3 - (arg3 * totalFees / 100) - (arg3 / 100)):
+                                                    revert with 0, 17
+                                                balanceOf[arg2] = balanceOf[arg2] + arg3 - (arg3 * totalFees / 100) - (arg3 / 100)
+                                                emit Transfer((arg3 - (arg3 * totalFees / 100) - (arg3 / 100)), arg1, arg2);
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg1), balanceOf[address(arg1)]
+                                                mem[0] = arg2
+                                                mem[32] = 0
+                                                require ext_code.size(dividendTrackerAddress)
+                                                call dividendTrackerAddress.0xe30443bc with:
+                                                     gas gas_remaining wei
+                                                    args address(arg2), balanceOf[address(arg2)]
+                                                if not ext_call.success:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12325 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12383 = mem[_12325 + 32]
+                                                                _12384 = mem[_12325 + 64]
+                                                                mem[mem[64]] = mem[_12325]
+                                                                mem[mem[64] + 64] = _12384
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12383, _12384, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12357 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12411 = mem[_12357 + 32]
+                                                                _12412 = mem[_12357 + 64]
+                                                                mem[mem[64]] = mem[_12357]
+                                                                mem[mem[64] + 64] = _12412
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12411, _12412, gasForProcessing, 1, tx.origin);
+                                                else:
+                                                    if not ext_call.success:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12359 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12415 = mem[_12359 + 32]
+                                                                _12416 = mem[_12359 + 64]
+                                                                mem[mem[64]] = mem[_12359]
+                                                                mem[mem[64] + 64] = _12416
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12415, _12416, gasForProcessing, 1, tx.origin);
+                                                    else:
+                                                        if not stor7:
+                                                            require ext_code.size(dividendTrackerAddress)
+                                                            call dividendTrackerAddress.0xffb2c479 with:
+                                                                 gas gas_remaining wei
+                                                                args gasForProcessing
+                                                            mem[mem[64] len 96] = ext_call.return_data[0 len 96]
+                                                            if ext_call.success:
+                                                                _12388 = mem[64]
+                                                                mem[64] = mem[64] + ceil32(return_data.size)
+                                                                require return_data.size >= 96
+                                                                _12444 = mem[_12388 + 32]
+                                                                _12445 = mem[_12388 + 64]
+                                                                mem[mem[64]] = mem[_12388]
+                                                                mem[mem[64] + 64] = _12445
+                                                                mem[mem[64] + 96] = gasForProcessing
+                                                                emit ProcessedDividendTracker(mem[mem[64]], _12444, _12445, gasForProcessing, 1, tx.origin);
+                            if allowance[address(arg1)][msg.sender].field_0 < arg3:
+                                revert with 0, 'ERC20: transfer amount exceeds allowance'
+                            if not arg1:
+                                revert with 0, 'ERC20: approve from the zero address'
+                            if not msg.sender:
+                                revert with 0, 'ERC20: approve to the zero address'
+    ('bool', 'msg.sender')
+    allowance[address(arg1)][address(msg.sender)].field_0 = allowance[address(arg1)][msg.sender].field_0 - arg3
+    emit Approval((allowance[address(arg1)][msg.sender].field_0 - arg3), arg1, msg.sender);
+    return 1
+}
+
+
+
+}
